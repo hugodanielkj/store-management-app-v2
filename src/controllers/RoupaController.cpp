@@ -6,9 +6,19 @@
 void RoupaController::adicionarRoupa(){
   RoupaDAO dao;
   RoupaView view;
-  Roupa roupa = view.obterDadosRoupa();
+  Roupa roupa = view.obterDadosRoupa();   // Pede ao usuario informacoes da roupa
 
-  // Verificar se foi escrito os dados corretos para as roupas (utiliza-se view)
+  while(true){    // Verifica se as informacoes da roupa estao corretas
+    try {
+      view.exibirRoupa(roupa);
+      view.exibirMensagem("As informacoes da roupa acima estao corretas?(y/n)");
+      if(!view.perguntarSimOuNao())
+        throw std::invalid_argument("Repita a operacao.\n");
+      break;
+    } catch (std::invalid_argument &err) {
+      view.exibirMensagem(err.what());
+    }
+  }
 
   if(dao.salvar(roupa)){   // Salva roupa e retorna seu id
     view.exibirMensagem("Sucesso ao adicionar Roupa.");

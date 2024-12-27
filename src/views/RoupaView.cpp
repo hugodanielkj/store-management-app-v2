@@ -3,6 +3,20 @@
 #include <iostream>
 #include <limits>
 
+void RoupaView::exibirMensagem(const std::string& mensagem){
+  std::cout << mensagem;
+}
+
+void RoupaView::exibirRoupa(const Roupa& roupa){
+  std::string nome =  roupa.getNome();
+  int quantidade = roupa.getQuantidade();
+  std::string tamanho = roupa.getTamanho();
+
+  std::cout << "Nome da roupa: " << nome << std::endl;
+  std::cout << "Quantidade de pecas: " << quantidade << std::endl;
+  std::cout << "Tamanho da roupa: " << tamanho << std::endl;
+}
+
 std::string RoupaView::obterNomeRoupa(){
   exibirMensagem("Digite o nome da roupa exatamente como foi criado: ");
   std::string nome;
@@ -67,5 +81,20 @@ bool RoupaView::verificacaoDaEntrada(){
     std::cin.clear();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return false;
+  }
+}
+
+int RoupaView::obterQuantidadeRoupa(){
+  exibirMensagem("Digite a quantidade de pecas da roupa: ");
+  
+  while(true){
+    try {
+      int quantidade;
+      std::cin >> quantidade;
+      if(!verificacaoDaEntrada())
+        throw std::invalid_argument("Erro: input invalido. Digite em numeros a quantia de pecas.");
+    } catch (std::invalid_argument &err) {
+      exibirMensagem(err.what());
+    }
   }
 }
