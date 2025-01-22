@@ -1,15 +1,19 @@
 #include "RoupaController.h"
-#include "RoupaView.h"
-#include "RoupaDAO.h"
+#include "../views/RoupaView.h"
+#include "../dao/RoupaDAO.h"
 #include <stdexcept>
+#include <iostream>
+
+RoupaController::RoupaController(sqlite3* _db): db(_db) {}
 
 void RoupaController::adicionarRoupa(){
-  RoupaDAO dao;
+  RoupaDAO dao(db);
   RoupaView view;
-  Roupa roupa = view.obterDadosRoupa();   // Pede ao usuario informacoes da roupa
+  Roupa roupa;
 
   while(true){    // Verifica se as informacoes da roupa estao corretas
     try {
+      roupa = view.obterDadosRoupa();   // Pede ao usuario informacoes da roupa
       view.exibirRoupa(roupa);
       view.exibirMensagem("As informacoes da roupa acima estao corretas?(y/n)");
       if(!view.perguntarSimOuNao())
@@ -27,8 +31,9 @@ void RoupaController::adicionarRoupa(){
   }
 }
 
+/*
 void RoupaController::lerRoupa(){
-  RoupaDAO dao;
+  RoupaDAO dao(db);
   RoupaView view;
   std::string nome = view.obterNomeRoupa();   // Obtem nome da roupa que se quer ler
 
@@ -45,26 +50,29 @@ void RoupaController::lerRoupa(){
     }
   }
 }
+*/
 
 void RoupaController::lerTodasRoupas(){
-  RoupaDAO dao;
+  RoupaDAO dao(db);
   RoupaView view;
 
   int ultimo_id = dao.getUltimoId();
+  std::cout << "TESTE TESTE " << ultimo_id << std::endl;
   view.exibirMensagem("-------------------------------------\n");
   view.exibirMensagem("Tabela de todas as roupas do estoque:\n");
   view.exibirMensagem("-------------------------------------\n");
   view.exibirMensagem("Nome      | Quantidade | Tamanho\n");
   view.exibirMensagem("-------------------------------------\n");
-  for(int i=0;i<ultimo_id;i++){
+  for(int i=1;i<=ultimo_id;i++){
     Roupa roupa = dao.capturar(i);
     view.exibirRoupa(roupa);
     view.exibirMensagem("-------------------------------------\n");
   }
 }
 
+/*
 void RoupaController::atualizarQuantidadeRoupa(){
-  RoupaDAO dao;
+  RoupaDAO dao(db);
   RoupaView view;
   std::string nome = view.obterNomeRoupa();
 
@@ -87,7 +95,7 @@ void RoupaController::atualizarQuantidadeRoupa(){
 }
 
 void RoupaController::removerRoupa(){
-  RoupaDAO dao;
+  RoupaDAO dao(db);
   RoupaView view;
   std::string nome = view.obterNomeRoupa();   // Pede para o usuario inserir nome de uma roupa
 
@@ -103,3 +111,4 @@ void RoupaController::removerRoupa(){
     }
   }
 }
+*/

@@ -1,7 +1,7 @@
 #ifndef ROUPA_VIEW_H
 #define ROUPA_VIEW_H
 
-#include "Roupa.h"
+#include "../models/Roupa.h"
 #include <string>
 
 class RoupaView{

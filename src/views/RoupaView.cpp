@@ -82,6 +82,7 @@ bool RoupaView::verificacaoDaEntrada(){
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return false;
   }
+  return true;
 }
 
 int RoupaView::obterQuantidadeRoupa(){
