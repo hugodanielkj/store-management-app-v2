@@ -1,6 +1,6 @@
 app/
 data/
 txt/
-src/a.out
+src/database/database.db/
+src/a.out/
 .vscode
-src/database/database.db
