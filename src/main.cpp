@@ -2,6 +2,8 @@
 #include "controllers/RoupaController.h"
 #include "controllers/ClienteController.h"
 
+//g++ main.cpp views/RoupaView.cpp views/ClienteView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp  models/Cliente.cpp dao/RoupaDAO.cpp dao/ClienteDAO.cpp controllers/RoupaController.cpp controllers/ClienteController.cpp -lsqlite3
+
 int main(){
   // Abertura do banco de dados
   sqlite3* db;
@@ -14,7 +16,7 @@ int main(){
   }
 
   // Criação da tabela de roupas
-  std::string sql_roupas = R"(
+  std::string sql = R"(
     CREATE TABLE IF NOT EXISTS roupas (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
@@ -23,8 +25,14 @@ int main(){
     );
   )";
 
+  char* errMsg = nullptr;
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+    std::cerr << "Erro ao criar tabela de roupas: " << errMsg << std::endl;
+    sqlite3_free(errMsg);
+  }
+
   // Criação da tabela de clientes
-  std::string sql_clientes = R"(
+  sql = R"(
     CREATE TABLE IF NOT EXISTS clientes (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
@@ -33,12 +41,22 @@ int main(){
     );
   )";
 
-  char* errMsg = nullptr;
-  if (sqlite3_exec(db, sql_roupas.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
-    std::cerr << "Erro ao criar tabela de roupas: " << errMsg << std::endl;
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+    std::cerr << "Erro ao criar tabela de clientes: " << errMsg << std::endl;
     sqlite3_free(errMsg);
   }
-  if (sqlite3_exec(db, sql_clientes.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+  
+  // Criação da tabela de itens_diversos
+  sql = R"(
+    CREATE TABLE IF NOT EXISTS itens_diversos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      telefone TEXT NOT NULL,
+      email TEXT NOT NULL
+    );
+  )";
+
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
     std::cerr << "Erro ao criar tabela de clientes: " << errMsg << std::endl;
     sqlite3_free(errMsg);
   }
