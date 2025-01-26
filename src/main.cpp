@@ -96,10 +96,12 @@ int main(){
         break;
       }
       case 3:{
-      itemDiverso_controller.adicionarItemDiverso();
+        itemDiverso_controller.adicionarItemDiverso();
+        break;
       }
       case 4:{
         itemDiverso_controller.lerTodosItemDiversos();
+        break;
       }
       case 5:{
         cliente_controller.adicionarCliente();
