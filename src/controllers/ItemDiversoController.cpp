@@ -15,7 +15,7 @@ void ItemDiversoController::adicionarItemDiverso(){
     try {
       itemDiverso = view.obterDadoItemDiverso();   // Pede ao usuario informacoes da roupa
       view.exibirItemDiverso(itemDiverso);
-      view.exibirMensagem("As informacoes da roupa acima estao corretas?(y/n)");
+      view.exibirMensagem("As informacoes dos itens acima estao corretas?(y/n)");
       if(!view.perguntarSimOuNao())
         throw std::invalid_argument("Repita a operacao.\n");
       break;
@@ -64,51 +64,95 @@ void ItemDiversoController::lerTodosItemDiversos(){
   view.exibirMensagem("Nome      | Quantidade | Tipo\n");
   view.exibirMensagem("-------------------------------------\n");
   for(int i=1;i<=ultimo_id;i++){
-    ItemDiverso itemDiverso = dao.capturar(i);
+    ItemDiverso itemDiverso = dao.capturarId(i);
     view.exibirItemDiverso(itemDiverso);
     view.exibirMensagem("-------------------------------------\n");
   }
 }
 
-/*
-void RoupaController::atualizarQuantidadeRoupa(){
-  RoupaDAO dao(db);
-  RoupaView view;
-  std::string nome = view.obterNomeRoupa();
 
-  bool loop = true;
-  while(loop){
-    try {
-      if(!dao.existeEssaRoupa(nome))
-        throw std::invalid_argument("Erro: Nome invalido para a Roupa. Quer fazer a operacao novamente?(y/n) ");
-      Roupa roupa = dao.capturar(nome);   // Constroi a roupa em questao
-      int quantidade = view.obterQuantidadeRoupa();   // Pede ao usuario quantidade da roupa
-      roupa.setQuantidade(quantidade);    // Seta nova quantidade de roupas
-      dao.atualizar(roupa);   // Atualiza quantidade de roupas no database
-      view.exibirMensagem("Sucesso ao atualizar quantidade de roupas.\n");
-      break;
-    } catch (std::invalid_argument &err) {
-      view.exibirMensagem(err.what());
-      loop = view.perguntarSimOuNao();    // Usuario diz se quer refazer operacao ou nao
+void ItemDiversoController::atualizarQuantidadeItemDiverso() {
+    ItemDiversoDAO dao(db);
+    ItemDiversoView view;
+    std::string nome = view.obterNomeDoItemDiverso();
+
+    bool loop = true;
+    while (loop) {
+        try {
+            // Verifica se o item existe no banco de dados
+            if (!dao.existeEsseItemDiverso(nome))
+                throw std::invalid_argument("Erro: O item informado não existe no banco de dados. Deseja tentar novamente? (y/n)");
+
+            // Captura o item com base no nome
+            ItemDiverso itemDiverso = dao.capturarNome(nome);
+
+            // Exibe a quantidade atual do item
+            view.exibirMensagem("Quantidade atual do item '" + nome + "': " + std::to_string(itemDiverso.getQuantidade()) + "\n");
+
+            // Pergunta ao usuário se deseja adicionar ou subtrair
+            view.exibirMensagem("Deseja adicionar ou subtrair itens? (a para adicionar / s para subtrair)");
+            char operacao;
+            std::cin >> operacao;
+
+            // Valida a operação escolhida
+            if (operacao != 'a' && operacao != 's') {
+                throw std::invalid_argument("Erro: Operação inválida. Digite 'a' para adicionar ou 's' para subtrair.");
+            }
+
+            // Pergunta ao usuário o valor a ser adicionado ou subtraído
+            int quantidadeAlterar = view.obterQuantidadeItemDiverso();
+
+            // Atualiza a quantidade com base na operação escolhida
+            int novaQuantidade = itemDiverso.getQuantidade();
+            if (operacao == 'a') {
+                novaQuantidade += quantidadeAlterar; // Adiciona a quantidade
+            } else if (operacao == 's') {
+                if (quantidadeAlterar > novaQuantidade) {
+                    throw std::invalid_argument("Erro: A subtração resultaria em uma quantidade negativa. Operação cancelada.");
+                }
+                novaQuantidade -= quantidadeAlterar; // Subtrai a quantidade
+            }
+
+            // Define a nova quantidade e atualiza o banco de dados
+            itemDiverso.setQuantidade(novaQuantidade);
+            dao.atualizar(itemDiverso);
+
+            // Exibe mensagem de sucesso
+            view.exibirMensagem("Sucesso ao atualizar a quantidade do item '" + nome + "'. Nova quantidade: " + std::to_string(novaQuantidade) + "\n");
+            break; // Sai do loop após atualizar com sucesso
+        } catch (std::invalid_argument &err) {
+            view.exibirMensagem(err.what());
+            loop = view.perguntarSimOuNao(); // Pergunta se o usuário deseja tentar novamente
+        }
     }
-  }
 }
+void ItemDiversoController::removerItemDiverso() {
+    ItemDiversoDAO dao(db);
+    ItemDiversoView view;
+    std::string nome = view.obterNomeDoItemDiverso();
 
-void RoupaController::removerRoupa(){
-  RoupaDAO dao(db);
-  RoupaView view;
-  std::string nome = view.obterNomeRoupa();   // Pede para o usuario inserir nome de uma roupa
+    bool loop = true;
+    while (loop) {
+        try {
+            // Verifica se o item existe no banco de dados
+            if (!dao.existeEsseItemDiverso(nome)) {
+                throw std::invalid_argument("Erro: O item informado não existe no banco de dados. Deseja tentar novamente? (y/n)");
+            }
 
-  bool loop = true;
-  while(true){
-    try{
-      if(!dao.existeEssaRoupa(nome))    // Verifica se o nome da roupa existe
-        throw std::invalid_argument("Erro: Nome invalido para a Roupa. Quer fazer a operacao novamente?(y/n) ");
-      dao.deletar(nome);      // Deleta a roupa caso ela exista
-    } catch (std::invalid_argument &err) {
-      view.exibirMensagem(err.what());
-      loop = view.perguntarSimOuNao();    // Usuario diz se quer refazer operacao ou nao
+            // Confirma a remoção com o usuário
+            view.exibirMensagem("Tem certeza de que deseja remover o item '" + nome + "' do banco de dados? (y/n)");
+            bool confirmacao = view.perguntarSimOuNao();
+
+            if (confirmacao) {
+                dao.deletar(nome); // Remove o item do banco de dados
+                view.exibirMensagem("Item '" + nome + "' removido com sucesso.");
+            } else {
+                view.exibirMensagem("Remoção cancelada pelo usuário.");
+            }
+            break; // Sai do loop após a remoção ou cancelamento
+        } catch (const std::invalid_argument &err) {
+            view.exibirMensagem(err.what());
+            loop = view.perguntarSimOuNao(); // Pergunta se o usuário deseja tentar novamente
+        }
     }
-  }
 }
-*/

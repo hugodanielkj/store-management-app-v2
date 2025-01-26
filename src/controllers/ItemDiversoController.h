@@ -9,7 +9,8 @@ class ItemDiversoController{
   public:
     ItemDiversoController(sqlite3* _db);
     void adicionarItemDiverso();
-    void lerRoupa();
+    void lerItemDiverso();
+    void atualizarQuantidadeItemDiverso();
     void lerTodosItemDiversos();
     void removerItemDiverso();
 

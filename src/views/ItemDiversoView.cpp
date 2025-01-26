@@ -99,3 +99,29 @@ std::string ItemDiversoView::obterTipoDoItem(){
     }
   }
 }
+
+int ItemDiversoView::obterQuantidadeItemDiverso() {
+    while (true) {
+        try {
+            exibirMensagem("Digite a quantidade de itens a adicionar/remover:");
+
+            int quantidade;
+            std::cin >> quantidade;
+
+            // Validação da entrada
+            if (std::cin.fail()) {
+                std::cin.clear(); // Limpa o estado de erro
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Descartar entrada inválida
+                throw std::invalid_argument("Erro: Entrada inválida. Digite um número inteiro.");
+            }
+
+            if (quantidade < 0) {
+                throw std::invalid_argument("Erro: A quantidade não pode ser negativa. Digite um número positivo.");
+            }
+
+            return quantidade; // Retorna a quantidade válida
+        } catch (const std::invalid_argument &err) {
+            exibirMensagem(err.what());
+        }
+    }
+}

@@ -10,14 +10,14 @@ class ItemDiversoDAO{
 
     // Operacoes CRUD Essenciais
     bool salvar(const ItemDiverso& itemDiverso);
-    ItemDiverso capturar(int id);
-    ItemDiverso capturar(std::string nome);
+    ItemDiverso capturarId(int id);
+    ItemDiverso capturarNome(const std::string& nome);
     bool atualizar(const ItemDiverso& itemDiverso);   // Atualiza atributos de uma roupa
-    bool deletar(std::string nome);
+    bool deletar(const std::string& nome);
 
     // Operacoes auxiliares
     int getUltimoId();
-    bool existeEsseItemDiverso(std::string nome);
+    bool existeEsseItemDiverso(std::string& nome);
 
     private:
       sqlite3* db;
