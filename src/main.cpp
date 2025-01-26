@@ -70,7 +70,7 @@ int main(){
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
   
   int opcao;
-  while(opcao != 6){
+  while(opcao != 7){
     std::cout << "Menu de acoes\n";
     std::cout << "1 - Adicionar uma roupa.\n";
     std::cout << "2 - Mostrar roupas cadastradas.\n";
@@ -105,6 +105,9 @@ int main(){
     }
     case 6:{
       itemDiverso_controller.removerItemDiverso();
+      break;
+    }
+    case 7:{
       break;
     }
     default:

@@ -1,5 +1,6 @@
 #include "ItemDiversoDAO.h"
 #include <iostream>
+#include <vector>
 
 ItemDiversoDAO::ItemDiversoDAO(sqlite3* _db): db(_db) {}
 
@@ -22,31 +23,35 @@ ItemDiverso ItemDiversoDAO::capturarId(int id){
   std::string sql = "SELECT * FROM itens_diversos WHERE id = ?;";
 
   sqlite3_stmt* stmt;
+  
+  // Prepara a consulta
   if(sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK){
-    std::cerr << "Erro ao fazer insercao: " << sqlite3_errmsg(db) << std::endl;
-    throw std::runtime_error("Erro ao capturar itens_diversos para mostrar ao usuario.");
+    std::cerr << "Erro ao preparar consulta SQL: " << sqlite3_errmsg(db) << std::endl;
+    throw std::runtime_error("Erro ao preparar consulta para capturar ItemDiverso por ID.");
   }
 
+  // Faz o bind do ID na consulta
   if(sqlite3_bind_int(stmt, 1, id) != SQLITE_OK){
-    std::cerr << "Erro ao dar bind_text: " << sqlite3_errmsg(db) << std::endl;
     sqlite3_finalize(stmt);
-    throw std::runtime_error("Erro ao capturar itens_diversos para mostrar ao usuario.");
+    std::cerr << "Erro ao fazer bind do ID: " << sqlite3_errmsg(db) << std::endl;
+    throw std::runtime_error("Erro ao associar o ID na consulta SQL.");
   }
 
-  ItemDiverso ItemDiverso;
+  ItemDiverso itemDiverso;
 
+  // Executa a consulta e verifica o resultado
   if(sqlite3_step(stmt) == SQLITE_ROW){
-    ItemDiverso.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
-    ItemDiverso.setQuantidade(sqlite3_column_int(stmt, 2));
-    ItemDiverso.setTipo(reinterpret_cast<const char*>(sqlite3_column_text(stmt,3)));
+    itemDiverso.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
+    itemDiverso.setQuantidade(sqlite3_column_int(stmt, 2));
+    itemDiverso.setTipo(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
   } else {
-    std::cerr << "Erro: Nenhuma ItemDiverso encontrada com o ID fornecido." << std::endl;
     sqlite3_finalize(stmt);
-    throw std::runtime_error("ItemDiverso não encontrada");
+    std::cerr << "Erro: Nenhum ItemDiverso encontrado com o ID fornecido: " << id << std::endl;
+    throw std::runtime_error("ItemDiverso não encontrado com o ID fornecido.");
   }
-  sqlite3_finalize(stmt);
 
-  return ItemDiverso;
+  sqlite3_finalize(stmt);
+  return itemDiverso;
 }
 
 int ItemDiversoDAO::getUltimoId(){
@@ -108,39 +113,31 @@ bool ItemDiversoDAO::existeEsseItemDiverso(std::string& nome) {
     return existe;
 }
 
-ItemDiverso ItemDiversoDAO::capturarNome(const std::string& nome) {
+ItemDiverso ItemDiversoDAO::capturarNome(const std::string &nome) {
     std::string sql = "SELECT * FROM itens_diversos WHERE nome = ?;";
 
-    sqlite3_stmt* stmt;
-    // Preparar a consulta SQL
+    sqlite3_stmt *stmt;
     if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-        std::cerr << "Erro ao preparar consulta: " << sqlite3_errmsg(db) << std::endl;
-        throw std::runtime_error("Erro ao capturar itens_diversos para mostrar ao usuário.");
+        throw std::runtime_error("Erro ao preparar consulta: " + std::string(sqlite3_errmsg(db)));
     }
 
-    // Fazer o bind do parâmetro 'nome'
+    // Faz o bind do nome na consulta
     if (sqlite3_bind_text(stmt, 1, nome.c_str(), -1, SQLITE_STATIC) != SQLITE_OK) {
-        std::cerr << "Erro ao fazer bind do parâmetro: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_finalize(stmt);
-        throw std::runtime_error("Erro ao capturar itens_diversos para mostrar ao usuário.");
+        throw std::runtime_error("Erro ao fazer o bind do nome: " + std::string(sqlite3_errmsg(db)));
     }
 
     ItemDiverso itemDiverso;
-
-    // Executar a consulta e processar o resultado
     if (sqlite3_step(stmt) == SQLITE_ROW) {
         itemDiverso.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
         itemDiverso.setQuantidade(sqlite3_column_int(stmt, 2));
         itemDiverso.setTipo(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
     } else {
-        std::cerr << "Erro: Nenhum ItemDiverso encontrado com o nome fornecido." << std::endl;
         sqlite3_finalize(stmt);
-        throw std::runtime_error("ItemDiverso não encontrado");
+        throw std::runtime_error("ItemDiverso não encontrado com o nome fornecido: " + nome);
     }
 
-    // Finalizar a consulta
-    sqlite3_finalize(stmt);
-
+    sqlite3_finalize(stmt);  // Finaliza o statement
     return itemDiverso;
 }
 
@@ -207,4 +204,23 @@ bool ItemDiversoDAO::deletar(const std::string &nome) {
 
     sqlite3_finalize(stmt); // Finaliza o statement
     return true; // Retorna sucesso
+}
+
+std::vector<int> ItemDiversoDAO::obterIdsValidos() {
+    std::string sql = "SELECT id FROM itens_diversos;";
+    sqlite3_stmt* stmt;
+    std::vector<int> idsValidos;
+
+    if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Erro ao preparar consulta: " << sqlite3_errmsg(db) << std::endl;
+        return idsValidos;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);  // Recupera o ID
+        idsValidos.push_back(id);
+    }
+
+    sqlite3_finalize(stmt);
+    return idsValidos;
 }

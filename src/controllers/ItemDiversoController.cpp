@@ -3,6 +3,7 @@
 #include "../dao/ItemDiversoDAO.h"
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 ItemDiversoController::ItemDiversoController(sqlite3* _db): db(_db) {}
 
@@ -52,22 +53,30 @@ void RoupaController::lerRoupa(){
 }
 */
 
-void ItemDiversoController::lerTodosItemDiversos(){
-  ItemDiversoDAO dao(db);
-  ItemDiversoView view;
+void ItemDiversoController::lerTodosItemDiversos() {
+    ItemDiversoDAO dao(db);
+    ItemDiversoView view;
 
-  int ultimo_id = dao.getUltimoId();
-  std::cout << "TESTE TESTE " << ultimo_id << std::endl;
-  view.exibirMensagem("-------------------------------------\n");
-  view.exibirMensagem("Tabela de todas as ItemDiversos do estoque:\n");
-  view.exibirMensagem("-------------------------------------\n");
-  view.exibirMensagem("Nome      | Quantidade | Tipo\n");
-  view.exibirMensagem("-------------------------------------\n");
-  for(int i=1;i<=ultimo_id;i++){
-    ItemDiverso itemDiverso = dao.capturarId(i);
-    view.exibirItemDiverso(itemDiverso);
+    // Obtém todos os IDs válidos (não se limita ao último ID)
+    std::vector<int> idsValidos = dao.obterIdsValidos();  // Modifique para obter todos os IDs existentes
+
+    if (idsValidos.empty()) {
+        view.exibirMensagem("Não há itens no estoque.\n");
+        return;
+    }
+
     view.exibirMensagem("-------------------------------------\n");
-  }
+    view.exibirMensagem("Tabela de todas as ItemDiversos do estoque:\n");
+    view.exibirMensagem("-------------------------------------\n");
+    view.exibirMensagem("Nome      | Quantidade | Tipo\n");
+    view.exibirMensagem("-------------------------------------\n");
+
+    // Itera sobre os IDs válidos
+    for (int id : idsValidos) {
+        ItemDiverso itemDiverso = dao.capturarId(id);  // Captura o item baseado no ID
+        view.exibirItemDiverso(itemDiverso);
+        view.exibirMensagem("-------------------------------------\n");
+    }
 }
 
 
@@ -80,8 +89,9 @@ void ItemDiversoController::atualizarQuantidadeItemDiverso() {
     while (loop) {
         try {
             // Verifica se o item existe no banco de dados
-            if (!dao.existeEsseItemDiverso(nome))
+            if (!dao.existeEsseItemDiverso(nome)) {
                 throw std::invalid_argument("Erro: O item informado não existe no banco de dados. Deseja tentar novamente? (y/n)");
+            }
 
             // Captura o item com base no nome
             ItemDiverso itemDiverso = dao.capturarNome(nome);
@@ -89,7 +99,7 @@ void ItemDiversoController::atualizarQuantidadeItemDiverso() {
             // Exibe a quantidade atual do item
             view.exibirMensagem("Quantidade atual do item '" + nome + "': " + std::to_string(itemDiverso.getQuantidade()) + "\n");
 
-            // Pergunta ao usuário se deseja adicionar ou subtrair
+            // Pergunta ao usuário o valor que deseja adicionar ou subtrair à quantidade
             view.exibirMensagem("Deseja adicionar ou subtrair itens? (a para adicionar / s para subtrair)");
             char operacao;
             std::cin >> operacao;
@@ -120,7 +130,11 @@ void ItemDiversoController::atualizarQuantidadeItemDiverso() {
             // Exibe mensagem de sucesso
             view.exibirMensagem("Sucesso ao atualizar a quantidade do item '" + nome + "'. Nova quantidade: " + std::to_string(novaQuantidade) + "\n");
             break; // Sai do loop após atualizar com sucesso
-        } catch (std::invalid_argument &err) {
+        } catch (const std::invalid_argument &err) {
+            view.exibirMensagem(err.what());
+            loop = view.perguntarSimOuNao(); // Pergunta se o usuário deseja tentar novamente
+        } catch (const std::runtime_error &err) {
+            // Erro quando não encontrar o item
             view.exibirMensagem(err.what());
             loop = view.perguntarSimOuNao(); // Pergunta se o usuário deseja tentar novamente
         }
