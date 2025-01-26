@@ -70,13 +70,15 @@ int main(){
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
   
   int opcao;
-  while(opcao != 5){
+  while(opcao != 6){
     std::cout << "Menu de acoes\n";
     std::cout << "1 - Adicionar uma roupa.\n";
     std::cout << "2 - Mostrar roupas cadastradas.\n";
-    std::cout << "3 - Atualizar a quantidade de pecas de uma roupa.\n";
-    std::cout << "4 - Deletar uma roupa do cadastro.\n";
-    std::cout << "5 - Fechar sistema.\n";
+    std::cout << "3 - Adicionar Item Diverso\n";
+    std::cout << "4 - Mostrar itens diversos cadastrados.\n";
+    std::cout << "5 - Atualizar a quantidade de um item cadastrado.\n";
+    std::cout << "6 - Deletar um item salvo no estoque\n";
+    std::cout << "7 - Fechar sistema.\n";
     std::cout << "Escolha uma opcao do menu de acoes: ";
     std::cin >> opcao;
 
@@ -91,11 +93,18 @@ int main(){
     }
     case 3:{
       itemDiverso_controller.adicionarItemDiverso();
+      break;
     }
     case 4:{
       itemDiverso_controller.lerTodosItemDiversos();
+      break;
     }
     case 5:{
+      itemDiverso_controller.atualizarQuantidadeItemDiverso();
+      break;
+    }
+    case 6:{
+      itemDiverso_controller.removerItemDiverso();
       break;
     }
     default:

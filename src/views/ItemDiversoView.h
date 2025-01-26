@@ -11,6 +11,7 @@ class ItemDiversoView{
     ItemDiverso obterDadoItemDiverso();
     std::string obterNomeDoItemDiverso();
     std::string obterTipoDoItem();
+    int obterQuantidadeItemDiverso();
     bool verificacaoDaEntrada();
 
     // Metodos de exibir informacoes ao usuario
