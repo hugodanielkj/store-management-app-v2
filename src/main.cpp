@@ -1,7 +1,8 @@
 #include <iostream>
 #include "controllers/RoupaController.h"
+#include "controllers/ItemDiversoController.h"
 
-// g++ main.cpp views/RoupaView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp dao/RoupaDAO.cpp controllers/RoupaController.cpp -lsqlite3
+// g++ main.cpp views/RoupaView.cpp views/ItemDiversoView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp dao/RoupaDAO.cpp dao/ItemDiversoDAO.cpp controllers/RoupaController.cpp controllers/ItemDiversoController.cpp -lsqlite3
 
 int main(){
   // Abertura do banco de dados
@@ -14,7 +15,8 @@ int main(){
     std::cout << "Sucesso ao conectar database! Inicializar sistema...\n";
   }
 
-  // Criação da tabela, se não existir
+  
+  // Criação da tabela de roupas
   std::string sql = R"(
     CREATE TABLE IF NOT EXISTS roupas (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,13 +28,44 @@ int main(){
 
   char* errMsg = nullptr;
   if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
-    std::cerr << "Erro ao criar tabela: " << errMsg << std::endl;
+    std::cerr << "Erro ao criar tabela de roupas: " << errMsg << std::endl;
+    sqlite3_free(errMsg);
+  }
+
+  // Criação da tabela de clientes
+  sql = R"(
+    CREATE TABLE IF NOT EXISTS clientes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      telefone TEXT NOT NULL,
+      email TEXT NOT NULL
+    );
+  )";
+
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+    std::cerr << "Erro ao criar tabela de clientes: " << errMsg << std::endl;
+    sqlite3_free(errMsg);
+  }
+
+  // Criação da tabela de itens_diversos
+  sql = R"(
+    CREATE TABLE IF NOT EXISTS itens_diversos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      quantidade INTEGER NOT NULL,
+      tipo TEXT NOT NULL
+    );
+  )";
+
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+    std::cerr << "Erro ao criar tabela de clientes: " << errMsg << std::endl;
     sqlite3_free(errMsg);
   }
 
   // Controllers para rodar programa
   RoupaController roupa_controller(db);
-    // ItemDiversoController 
+  // ItemDiversoController 
+  ItemDiversoController itemDiverso_controller(db);
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
   
@@ -55,6 +88,12 @@ int main(){
     case 2:{
       roupa_controller.lerTodasRoupas();
       break;
+    }
+    case 3:{
+      itemDiverso_controller.adicionarItemDiverso();
+    }
+    case 4:{
+      itemDiverso_controller.lerTodosItemDiversos();
     }
     case 5:{
       break;

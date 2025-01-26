@@ -5,6 +5,9 @@ ItemDiverso::ItemDiverso(std::string nome, int quantidade, std::string tipo): _t
   setNome(nome);
   setQuantidade(quantidade);
 }
+ItemDiverso::ItemDiverso(){
+  setID(-1);
+}
 
 std::string ItemDiverso::getTipo() const{
   return _tipo;
