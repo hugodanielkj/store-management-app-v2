@@ -1,5 +1,6 @@
+#ifndef PRODUTO_H
+#define PRODUTO_H
 #include <string>
-
 class Produto{
   private:
     int _id;
@@ -17,3 +18,4 @@ class Produto{
     int getQuantidade() const;
     void setQuantidade(int quantidade);
 };
+#endif

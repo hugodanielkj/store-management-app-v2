@@ -1,8 +1,9 @@
 #include <iostream>
 #include "controllers/RoupaController.h"
 #include "controllers/ClienteController.h"
+#include "controllers/ItemDiversoController.h"
 
-//g++ main.cpp views/RoupaView.cpp views/ClienteView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp  models/Cliente.cpp dao/RoupaDAO.cpp dao/ClienteDAO.cpp controllers/RoupaController.cpp controllers/ClienteController.cpp -lsqlite3
+//g++ main.cpp views/RoupaView.cpp views/ClienteView.cpp views/ItemDiversoView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp  models/Cliente.cpp dao/RoupaDAO.cpp dao/ClienteDAO.cpp dao/ItemDiversoDAO.cpp controllers/RoupaController.cpp controllers/ClienteController.cpp controllers/ItemDiversoController.cpp -lsqlite3
 
 int main(){
   // Abertura do banco de dados
@@ -64,6 +65,7 @@ int main(){
   // Controllers
   RoupaController roupa_controller(db);
   ClienteController cliente_controller(db);
+  ItemDiversoController itemDiverso_controller(db);
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
   
@@ -93,6 +95,12 @@ int main(){
         roupa_controller.lerTodasRoupas();
         break;
       }
+      case 3:{
+      itemDiverso_controller.adicionarItemDiverso();
+      }
+      case 4:{
+        itemDiverso_controller.lerTodosItemDiversos();
+      }
       case 5:{
         cliente_controller.adicionarCliente();
         break;
@@ -104,9 +112,10 @@ int main(){
       case 9:{
         break;
       }
-      default:
+      default:{
         std::cout << "Opcao invalida!\n";
         break;
+      }
     }
   }
 
