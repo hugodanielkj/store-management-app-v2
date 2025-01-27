@@ -83,6 +83,14 @@ int main(){
         cliente_controller.lerTodosClientes();
         break;
       }
+      case 7:{
+        cliente_controller.atualizarDadosCliente();
+        break;
+      }
+      case 8:{
+        cliente_controller.removerCliente();
+        break;
+      }
       case 9:{
         break;
       }
