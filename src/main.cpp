@@ -1,6 +1,9 @@
 #include <iostream>
 #include "controllers/RoupaController.h"
 #include "controllers/ClienteController.h"
+#include "controllers/ItemDiversoController.h"
+
+// g++ main.cpp views/RoupaView.cpp views/ItemDiversoView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp dao/RoupaDAO.cpp dao/ItemDiversoDAO.cpp controllers/RoupaController.cpp controllers/ItemDiversoController.cpp -lsqlite3
 
 int main(){
   // Abertura do banco de dados
@@ -12,9 +15,9 @@ int main(){
   } else {
     std::cout << "Sucesso ao conectar database! Inicializar sistema...\n";
   }
-
+  
   // Criação da tabela de roupas
-  std::string sql_roupas = R"(
+  std::string sql = R"(
     CREATE TABLE IF NOT EXISTS roupas (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
@@ -34,17 +37,44 @@ int main(){
   )";
 
   char* errMsg = nullptr;
-  if (sqlite3_exec(db, sql_roupas.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
     std::cerr << "Erro ao criar tabela de roupas: " << errMsg << std::endl;
     sqlite3_free(errMsg);
   }
-  if (sqlite3_exec(db, sql_clientes.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+
+  // Criação da tabela de clientes
+  sql = R"(
+    CREATE TABLE IF NOT EXISTS clientes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      telefone TEXT NOT NULL,
+      email TEXT NOT NULL
+    );
+  )";
+
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
+    std::cerr << "Erro ao criar tabela de clientes: " << errMsg << std::endl;
+    sqlite3_free(errMsg);
+  }
+
+  // Criação da tabela de itens_diversos
+  sql = R"(
+    CREATE TABLE IF NOT EXISTS itens_diversos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      nome TEXT NOT NULL,
+      quantidade INTEGER NOT NULL,
+      tipo TEXT NOT NULL
+    );
+  )";
+
+  if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
     std::cerr << "Erro ao criar tabela de clientes: " << errMsg << std::endl;
     sqlite3_free(errMsg);
   }
 
   // Controllers
   RoupaController roupa_controller(db);
+  ItemDiversoController itemDiverso_controller(db);
   ClienteController cliente_controller(db);
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
