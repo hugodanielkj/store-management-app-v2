@@ -3,7 +3,7 @@
 #include "controllers/ClienteController.h"
 #include "controllers/ItemDiversoController.h"
 
-// g++ main.cpp views/RoupaView.cpp views/ItemDiversoView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp dao/RoupaDAO.cpp dao/ItemDiversoDAO.cpp controllers/RoupaController.cpp controllers/ItemDiversoController.cpp -lsqlite3
+// g++ main.cpp views/RoupaView.cpp views/ItemDiversoView.cpp views/ClienteView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp models/Cliente.cpp dao/RoupaDAO.cpp dao/ItemDiversoDAO.cpp dao/ClienteDAO.cpp controllers/RoupaController.cpp controllers/ItemDiversoController.cpp controllers/ClienteController.cpp -lsqlite3
 
 int main(){
   // Abertura do banco de dados
