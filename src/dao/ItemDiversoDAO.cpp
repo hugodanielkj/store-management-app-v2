@@ -5,7 +5,7 @@
 ItemDiversoDAO::ItemDiversoDAO(sqlite3* _db): db(_db) {}
 
 bool ItemDiversoDAO::salvar(const ItemDiverso& ItemDiverso){
-  std::string sql = "INSERT INTO itens_diversos (nome, quantidade, tipo) VALUES('" + ItemDiverso.getNome() + "', " + std::to_string(ItemDiverso.getQuantidade()) +", '" + ItemDiverso.getTipo() + "');";
+  std::string sql = "INSERT INTO itens_diversos (nome, quantidade, marca) VALUES('" + ItemDiverso.getNome() + "', " + std::to_string(ItemDiverso.getQuantidade()) +", '" + ItemDiverso.getMarca() + "');";
 
   char* mensagemErro = nullptr;
   int exit = sqlite3_exec(db, sql.c_str(), 0, 0, &mensagemErro);
@@ -43,7 +43,7 @@ ItemDiverso ItemDiversoDAO::capturarId(int id){
   if(sqlite3_step(stmt) == SQLITE_ROW){
     itemDiverso.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
     itemDiverso.setQuantidade(sqlite3_column_int(stmt, 2));
-    itemDiverso.setTipo(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
+    itemDiverso.setMarca(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
   } else {
     sqlite3_finalize(stmt);
     std::cerr << "Erro: Nenhum ItemDiverso encontrado com o ID fornecido: " << id << std::endl;
@@ -131,7 +131,7 @@ ItemDiverso ItemDiversoDAO::capturarNome(const std::string &nome) {
     if (sqlite3_step(stmt) == SQLITE_ROW) {
         itemDiverso.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
         itemDiverso.setQuantidade(sqlite3_column_int(stmt, 2));
-        itemDiverso.setTipo(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
+        itemDiverso.setMarca(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3)));
     } else {
         sqlite3_finalize(stmt);
         throw std::runtime_error("ItemDiverso não encontrado com o nome fornecido: " + nome);

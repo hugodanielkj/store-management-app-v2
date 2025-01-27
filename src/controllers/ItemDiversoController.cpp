@@ -32,18 +32,18 @@ void ItemDiversoController::adicionarItemDiverso(){
   }
 }
 
-/*
-void RoupaController::lerRoupa(){
-  RoupaDAO dao(db);
-  RoupaView view;
-  std::string nome = view.obterNomeRoupa();   // Obtem nome da roupa que se quer ler
+
+void ItemDiversoController::lerItemDiverso(){
+  ItemDiversoDAO dao(db);
+  ItemDiversoView view;
+  std::string nome = view.obterNomeDoItemDiverso();   // Obtem nome da roupa que se quer ler
 
   bool loop = true;
   while(loop){
     try {
-      Roupa roupa = dao.capturar(nome);   // Constroi a roupa em questao
+      ItemDiverso itemDiverso = dao.capturarNome(nome);   // Constroi a roupa em questao
       // Verificar se roupa foi criada e lancar throw expcetion
-      view.exibirRoupa(roupa);    // Exibe roupa para o usuario
+      view.exibirItemDiverso(itemDiverso);    // Exibe roupa para o usuario
       break;
     } catch (std::invalid_argument &err) {
       view.exibirMensagem("Erro: Nome invalido para a Roupa. Quer fazer a operacao novamente?\n");
@@ -51,7 +51,7 @@ void RoupaController::lerRoupa(){
     }
   }
 }
-*/
+
 
 void ItemDiversoController::lerTodosItemDiversos() {
     ItemDiversoDAO dao(db);
