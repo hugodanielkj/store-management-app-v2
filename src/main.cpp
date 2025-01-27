@@ -52,8 +52,8 @@ int main(){
     CREATE TABLE IF NOT EXISTS itens_diversos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
-      telefone TEXT NOT NULL,
-      email TEXT NOT NULL
+      quantidade INTEGER NOT NULL,
+      marca TEXT NOT NULL
     );
   )";
 
@@ -68,21 +68,25 @@ int main(){
   ItemDiversoController itemDiverso_controller(db);
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
+
+  std::cout << "ALERTA! - Nao utilize 'espaço', ao inves disso utilize '-' ou '_'\n\n";
+
+  std::cout << "Exemplo - Camisa_Polo ou Camisa-Polo\n\n";
   
   int opcao = 0;
-  while(opcao != 9){
-    std::cout << "\nMenu de acoes\n";
+  while(opcao != 14){
+    std::cout << "\nMenu de acoes\n\n";
     std::cout << "--- Roupas ---\n";
     std::cout << "1 - Adicionar uma roupa\n";
     std::cout << "2 - Mostrar roupas cadastradas\n";
     std::cout << "3 - Atualizar quantidade de pecas de uma roupa\n";
-    std::cout << "4 - Deletar uma roupa do cadastro\n";
+    std::cout << "4 - Deletar uma roupa do cadastro\n\n";
     std::cout << "--- Clientes ---\n";
-    std::cout << "5 - Adicionar um cliente\n";
-    std::cout << "6 - Mostrar clientes cadastrados\n";
-    std::cout << "7 - Atualizar dados de um cliente\n";
-    std::cout << "8 - Deletar um cliente\n";
-    std::cout << "9 - Fechar sistema\n";
+    std::cout << "10 - Adicionar um cliente\n";
+    std::cout << "11 - Mostrar clientes cadastrados\n";
+    std::cout << "12 - Atualizar dados de um cliente\n";
+    std::cout << "13 - Deletar um cliente\n";
+    std::cout << "14 - Fechar sistema\n";
     std::cout << "Escolha uma opcao do menu de acoes: ";
     std::cin >> opcao;
 
@@ -96,28 +100,48 @@ int main(){
         break;
       }
       case 3:{
-        itemDiverso_controller.adicionarItemDiverso();
+        roupa_controller.atualizarQuantidadeRoupa();
         break;
       }
       case 4:{
-        itemDiverso_controller.lerTodosItemDiversos();
+        roupa_controller.removerRoupa();
         break;
       }
       case 5:{
-        cliente_controller.adicionarCliente();
+        itemDiverso_controller.adicionarItemDiverso();
         break;
       }
       case 6:{
-        cliente_controller.lerTodosClientes();
+        itemDiverso_controller.lerTodosItemDiversos();
         break;
+      }
+      case 7:{
+        itemDiverso_controller.atualizarQuantidadeItemDiverso();
+        break;
+      }
+      case 8:{
+        itemDiverso_controller.removerItemDiverso();
       }
       case 9:{
+        itemDiverso_controller.lerItemDiverso();
+      }
+      case 10:{
+        cliente_controller.adicionarCliente();
+      }
+      case 11:{
+        cliente_controller.lerTodosClientes();
+      }
+      case 12:{
+        cliente_controller.atualizarDadosCliente();
+      }
+      case 13:{
+        cliente_controller.removerCliente();
+      }
+      case 14:{
         break;
       }
-      default:{
-        std::cout << "Opcao invalida!\n";
+      default:
         break;
-      }
     }
   }
 

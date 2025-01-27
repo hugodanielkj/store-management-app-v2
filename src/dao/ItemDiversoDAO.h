@@ -3,6 +3,7 @@
 
 #include <sqlite3.h>
 #include "../models/ItemDiverso.h"
+#include <vector>
 
 class ItemDiversoDAO{
   public:
@@ -14,6 +15,7 @@ class ItemDiversoDAO{
     ItemDiverso capturarNome(const std::string& nome);
     bool atualizar(const ItemDiverso& itemDiverso);   // Atualiza atributos de uma roupa
     bool deletar(const std::string& nome);
+    std::vector<int> obterIdsValidos();
 
     // Operacoes auxiliares
     int getUltimoId();

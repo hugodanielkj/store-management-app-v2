@@ -10,13 +10,13 @@ class ItemDiversoView{
     bool perguntarSimOuNao();
     ItemDiverso obterDadoItemDiverso();
     std::string obterNomeDoItemDiverso();
-    std::string obterTipoDoItem();
+    std::string obterMarcaDoItem();
     int obterQuantidadeItemDiverso();
-    bool verificacaoDaEntrada();
+    bool verificacaoDaEntrada(const std::string& entrada, const std::string& tipo);
 
     // Metodos de exibir informacoes ao usuario
     void exibirMensagem(const std::string& mensagem);
     void exibirItemDiverso(const ItemDiverso& itemDiverso);
-};
+};  
 
 #endif

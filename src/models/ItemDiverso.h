@@ -6,14 +6,14 @@
 
 class ItemDiverso : public Produto{
   private:
-    std::string _tipo;
+    std::string _marca;
 
   public:
     ItemDiverso();
-    ItemDiverso(std::string nome, int quantidade, std::string tipo);
+    ItemDiverso(std::string nome, int quantidade, std::string marca);
 
-    std::string getTipo() const;
-    void setTipo(std::string tipo);
+    std::string getMarca() const;
+    void setMarca(std::string marca);
 };
 
 #endif

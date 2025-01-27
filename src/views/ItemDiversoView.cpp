@@ -2,6 +2,7 @@
 #include "../models/ItemDiverso.h"
 #include <iostream>
 #include <limits>
+#include <vector>
 
 void ItemDiversoView::exibirMensagem(const std::string& mensagem){
   std::cout << mensagem;
@@ -9,19 +10,30 @@ void ItemDiversoView::exibirMensagem(const std::string& mensagem){
 
 void ItemDiversoView::exibirItemDiverso(const ItemDiverso& itemDiverso){
   std::string nome =  itemDiverso.getNome();
-  std::string tipo = itemDiverso.getTipo();
+  std::string marca = itemDiverso.getMarca();
   int quantidade = itemDiverso.getQuantidade();
 
   std::cout << "Nome do item: " << nome << std::endl;
-  std::cout << "Tipo do Item: " << tipo << std::endl;
+  std::cout << "Marca do Item: " << marca << std::endl;
   std::cout << "Quantidade de Itens " << quantidade << std::endl;
 }
 
-std::string ItemDiversoView::obterNomeDoItemDiverso(){
-  exibirMensagem("Digite o nome do item exatamente como foi criado: ");
-  std::string nome;
-  std::cin >> nome;
-  return nome;
+std::string ItemDiversoView::obterNomeDoItemDiverso() {
+  while (true) {
+    try {
+      exibirMensagem("Digite o nome do item: ");
+      std::string nome;
+      std::cin >> nome;
+
+      if (!verificacaoDaEntrada(nome, "nome")) {
+        throw std::invalid_argument("Erro: O nome deve conter apenas letras. Refaca a operacao.\n");
+      }
+
+      return nome; // Nome válido
+    } catch (const std::invalid_argument& err) {
+      exibirMensagem(err.what());
+    }
+  }
 }
 
 bool ItemDiversoView::perguntarSimOuNao(){
@@ -45,83 +57,109 @@ bool ItemDiversoView::perguntarSimOuNao(){
   return false;   // Apenas para nao gerar warning
 }
 
-ItemDiverso ItemDiversoView::obterDadoItemDiverso(){
-  std::string nome, tamanho,tipo;
+ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
+  std::string nome, marca;
   int quantidade;
 
-  while(true){
+  while (true) {
     try {
+      // Solicitar e validar o nome do item
       exibirMensagem("Digite o nome do item: ");
       std::cin >> nome;
-      if(!verificacaoDaEntrada())
-        throw std::invalid_argument("Erro: entrada invalida, insira o nome usando letras. Refaca a operacao a seguir.\n");
+      if (!verificacaoDaEntrada(nome, "nome")) {
+        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras. Refaca a operação.\n");
+      }
 
+      // Solicitar e validar a quantidade do item
       exibirMensagem("Digite a quantidade de itens: ");
-      std::cin >> quantidade;
-      if(!verificacaoDaEntrada())
-        throw std::invalid_argument("Erro: entrada invalida, insira um numero na quantidade de pecas. Refaca a operacao a seguir.\n");
+      std::string entradaQuantidade;
+      std::cin >> entradaQuantidade;
+      if (!verificacaoDaEntrada(entradaQuantidade, "quantidade")) {
+        throw std::invalid_argument("Erro: entrada inválida. A quantidade deve ser um número inteiro positivo. Refaca a operação.\n");
+      }
+      quantidade = std::stoi(entradaQuantidade); // Conversão segura da quantidade
 
-      exibirMensagem("Digite o tipo do item: ");
-      std::cin >> tipo;
-      if(!verificacaoDaEntrada())
-        throw std::invalid_argument("Erro: entrada invalida, insira o tipo utilizando poucos caracteres. Refaca a operacao a seguir.\n");
+      // Solicitar e validar a marca do item
+      exibirMensagem("Digite a marca do item: ");
+      std::cin >> marca;
+      if (!verificacaoDaEntrada(marca, "marca")) {
+        throw std::invalid_argument("Erro: entrada inválida. A marca deve conter apenas letras. Refaca a operação.\n");
+      }
 
+      // Quebra do loop ao concluir com entradas válidas
       break;
-    } catch (std::invalid_argument &err) {
-      exibirMensagem(err.what());
+
+    } catch (const std::invalid_argument &err) {
+      exibirMensagem(err.what()); // Exibir mensagem de erro e repetir o loop
     }
   }
 
-  ItemDiverso itemDiverso(nome, quantidade, tipo);
+  // Criação e retorno do objeto ItemDiverso com os dados válidos
+  ItemDiverso itemDiverso(nome, quantidade, marca);
   return itemDiverso;
 }
 
-bool ItemDiversoView::verificacaoDaEntrada(){
-  if(std::cin.fail()){
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    return false;
+bool ItemDiversoView::verificacaoDaEntrada(const std::string& entrada, const std::string& tipo) {
+  if (tipo == "nome" || tipo == "marca") {
+    // Verificar se a entrada contém apenas letras
+    for (char c : entrada) {
+      if (!std::isalpha(c)) { // Não é letra
+        return false;
+      }
+    }
+    return true;
+
+  } else if (tipo == "quantidade") {
+    // Verificar se a entrada é um número inteiro positivo
+    try {
+      int quantidade = std::stoi(entrada);
+      if (quantidade < 0) {
+        return false;
+      }
+      return true;
+    } catch (...) {
+      return false; // Caso não seja número
+    }
+
+  } else {
+    return false; // Tipo desconhecido
   }
-  return true;
 }
 
-std::string ItemDiversoView::obterTipoDoItem(){
-  exibirMensagem("Digite o tipo do item: ");
-  
-  while(true){
+std::string ItemDiversoView::obterMarcaDoItem() {
+  while (true) {
     try {
-      std::string tipo;
-      std::cin >> tipo;
-      if(!verificacaoDaEntrada())
-        throw std::invalid_argument("Erro: input invalido. Digite um tipo valido");
-    } catch (std::invalid_argument &err) {
-      exibirMensagem(err.what());
+      exibirMensagem("Digite a marca do item: ");
+      std::string marca;
+      std::cin >> marca;
+
+      // Validar a entrada: apenas letras são permitidas
+      if (!verificacaoDaEntrada(marca, "marca")) {
+        throw std::invalid_argument("Erro: entrada inválida. A marca deve conter apenas letras. Tente novamente.\n");
+      }
+
+      return marca; // Retorna a marca válida
+
+    } catch (const std::invalid_argument &err) {
+      exibirMensagem(err.what()); // Exibe mensagem de erro e repete o loop
     }
   }
 }
 
 int ItemDiversoView::obterQuantidadeItemDiverso() {
-    while (true) {
-        try {
-            exibirMensagem("Digite a quantidade de itens a adicionar/remover:");
+  while (true) {
+    try {
+      exibirMensagem("Digite a quantidade de itens a adicionar/remover: ");
+      std::string entrada;
+      std::cin >> entrada;
 
-            int quantidade;
-            std::cin >> quantidade;
+      if (!verificacaoDaEntrada(entrada, "quantidade")) {
+        throw std::invalid_argument("Erro: Entrada inválida. A quantidade deve ser um número inteiro positivo.\n");
+      }
 
-            // Validação da entrada
-            if (std::cin.fail()) {
-                std::cin.clear(); // Limpa o estado de erro
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Descartar entrada inválida
-                throw std::invalid_argument("Erro: Entrada inválida. Digite um número inteiro.");
-            }
-
-            if (quantidade < 0) {
-                throw std::invalid_argument("Erro: A quantidade não pode ser negativa. Digite um número positivo.");
-            }
-
-            return quantidade; // Retorna a quantidade válida
-        } catch (const std::invalid_argument &err) {
-            exibirMensagem(err.what());
-        }
+      return std::stoi(entrada); // Retorna a quantidade válida
+    } catch (const std::invalid_argument& err) {
+      exibirMensagem(err.what());
     }
+  }
 }
