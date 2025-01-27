@@ -15,7 +15,6 @@ int main(){
     std::cout << "Sucesso ao conectar database! Inicializar sistema...\n";
   }
 
-  
   // Criação da tabela de roupas
   std::string sql = R"(
     CREATE TABLE IF NOT EXISTS roupas (
@@ -53,7 +52,7 @@ int main(){
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
       quantidade INTEGER NOT NULL,
-      tipo TEXT NOT NULL
+      marca TEXT NOT NULL
     );
   )";
 
@@ -68,17 +67,24 @@ int main(){
   ItemDiversoController itemDiverso_controller(db);
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
+
+  std::cout << "ALERTA! - Nao utilize 'espaço', ao inves disso utilize '-' ou '_' " << std::endl;
+
+  std::cout << "Exemplo - Camisa_Polo ou Camisa-Polo" << std::endl;
   
   int opcao;
-  while(opcao != 7){
+  while(opcao != 10){
     std::cout << "Menu de acoes\n";
     std::cout << "1 - Adicionar uma roupa.\n";
     std::cout << "2 - Mostrar roupas cadastradas.\n";
-    std::cout << "3 - Adicionar Item Diverso\n";
-    std::cout << "4 - Mostrar itens diversos cadastrados.\n";
-    std::cout << "5 - Atualizar a quantidade de um item cadastrado.\n";
-    std::cout << "6 - Deletar um item salvo no estoque\n";
-    std::cout << "7 - Fechar sistema.\n";
+    std::cout << "3 - Atualizar roupas cadastrada\n";
+    std::cout << "4 - Deletar roupas cadastradas\n";
+    std::cout << "5 - Adicionar Item Diverso\n";
+    std::cout << "6 - Mostrar itens diversos cadastrados.\n";
+    std::cout << "7 - Atualizar a quantidade de um item cadastrado.\n";
+    std::cout << "8 - Deletar um item salvo no estoque\n";
+    std::cout << "9 - Ler Item Diverso\n";
+    std::cout << "10 - Fechar sistema.\n";
     std::cout << "Escolha uma opcao do menu de acoes: ";
     std::cin >> opcao;
 
@@ -92,23 +98,30 @@ int main(){
       break;
     }
     case 3:{
-      itemDiverso_controller.adicionarItemDiverso();
+      roupa_controller.atualizarQuantidadeRoupa();
       break;
     }
     case 4:{
-      itemDiverso_controller.lerTodosItemDiversos();
+      roupa_controller.removerRoupa();
       break;
     }
     case 5:{
-      itemDiverso_controller.atualizarQuantidadeItemDiverso();
+      itemDiverso_controller.adicionarItemDiverso();
       break;
     }
     case 6:{
-      itemDiverso_controller.removerItemDiverso();
+      itemDiverso_controller.lerTodosItemDiversos();
       break;
     }
     case 7:{
+      itemDiverso_controller.atualizarQuantidadeItemDiverso();
       break;
+    }
+    case 8: {
+      itemDiverso_controller.removerItemDiverso();
+    }
+    case 9: {
+      itemDiverso_controller.lerItemDiverso();
     }
     default:
       break;
