@@ -3,6 +3,7 @@
 
 VendaDAO::VendaDAO(sqlite3* _db): db(_db) {}
 
+/*
 bool VendaDAO::salvar(const Venda& venda){
   std::string sql = "INSERT INTO " + venda.getCliente() + "_tabela_venda (produto, quantidade, data) VALUES('" + venda.getProduto() + "', " + std::to_string(venda.getQuantidade()) +", '" + venda.getData() + "');";
 
@@ -17,6 +18,7 @@ bool VendaDAO::salvar(const Venda& venda){
   std::cout << "Venda adicionada com sucesso!" << std::endl;
   return true;
 }
+*/
 
 int VendaDAO::getUltimoId(std::string cliente){
   std::string sql = "SELECT MAX(id) FROM "+ cliente +"_tabela_venda;";
@@ -28,7 +30,7 @@ int VendaDAO::getUltimoId(std::string cliente){
   }
 
   // Executar a consulta e obter o resultado
-  int ultimoID = 0;
+  int ultimoID = 1;
   if (sqlite3_step(stmt) == SQLITE_ROW) {
     // Verificar se o resultado não é NULL
     if (sqlite3_column_type(stmt, 0) != SQLITE_NULL) {

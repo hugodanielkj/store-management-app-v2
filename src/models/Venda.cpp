@@ -2,26 +2,26 @@
 
 Venda::Venda() {}
 
-Venda::Venda(std::string _cliente, std::string _produto, int _quantidade, std::string _data): cliente(_cliente), produto(_produto), quantidade(_quantidade), data(_data) {}
+Venda::Venda(std::string _cliente, std::vector<std::string> _produtos, std::vector<int> _quantidades_de_produtos, std::string _data): cliente(_cliente), produtos(_produtos), quantidades_de_produtos(_quantidades_de_produtos), data(_data) {}
 
 std::string Venda::getCliente() const {
   return cliente;
 }
 
-std::string Venda::getProduto() const {
-  return produto;
+std::vector<std::string> Venda::getProdutos() const {
+  return produtos;
 }
 
-void Venda::setProduto(std::string _produto) {
-  produto = _produto;
+void Venda::setProdutos(std::vector<std::string> _produtos) {
+  produtos = _produtos;
 }
 
-int Venda::getQuantidade() const {
-  return quantidade;
+std::vector<int> Venda::getQuantidadesDeProdutos() const {
+  return quantidades_de_produtos;
 }
 
-void Venda::setQuantidade(int _quantidade) {
-  quantidade = _quantidade;
+void Venda::setQuantidades(std::vector<int> _quantidades_de_produtos) {
+  quantidades_de_produtos = _quantidades_de_produtos;
 }
 
 std::string Venda::getData() const {

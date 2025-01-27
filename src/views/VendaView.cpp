@@ -7,6 +7,7 @@ void VendaView::exibirMensagem(const std::string& mensagem){
   std::cout << mensagem;
 }
 
+/*
 void VendaView::exibirVenda(const Venda& venda){
   std::string produto =  venda.getProduto();
   int quantidade = venda.getQuantidade();
@@ -16,6 +17,7 @@ void VendaView::exibirVenda(const Venda& venda){
   std::cout << "Quantidade de pecas: " << quantidade << std::endl;
   std::cout << "Tamanho da roupa: " << data << std::endl;
 }
+*/
 
 bool VendaView::perguntarSimOuNao(){
   char opcao_do_usuario;
@@ -39,38 +41,51 @@ bool VendaView::perguntarSimOuNao(){
 }
 
 Venda VendaView::obterDadosVenda(){
-  std::string cliente, produto, data;
-  int quantidade;
+  std::string cliente, data;
+  std::vector<std::string> produtos;
+  std::vector<int> quantidades_de_produtos;
 
   while(true){
     try {
-      exibirMensagem("Digite o nome da roupa: ");
+      exibirMensagem("Digite o nome do cliente: ");
       std::cin >> cliente;
       if(!verificacaoDaEntrada())
         throw std::invalid_argument("Erro: entrada invalida, insira o nome usando letras. Refaca a operacao a seguir.\n");
 
-      exibirMensagem("Digite o nome da roupa: ");
-      std::cin >> produto;
-      if(!verificacaoDaEntrada())
-        throw std::invalid_argument("Erro: entrada invalida, insira o nome usando letras. Refaca a operacao a seguir.\n");
-
-      exibirMensagem("Digite a quantidade de pecas dessa roupa: ");
-      std::cin >> quantidade;
-      if(!verificacaoDaEntrada())
-        throw std::invalid_argument("Erro: entrada invalida, insira um numero na quantidade de pecas. Refaca a operacao a seguir.\n");
-
-      exibirMensagem("Digite o tamanho da roupa: ");
+      exibirMensagem("Digite a data que a venda esta acontecendo\n");
+      exibirMensagem("Formato exemplo(27/12/24): ");
       std::cin >> data;
       if(!verificacaoDaEntrada())
         throw std::invalid_argument("Erro: entrada invalida, insira o tamanho utilizando poucos caracteres. Refaca a operacao a seguir.\n");
 
+      char opcao;
+      while(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
+        exibirMensagem("Digite o nome do produto que o cliente comprou: ");
+        std::string nome_do_produto;
+        std::cin >> nome_do_produto;
+        if(!verificacaoDaEntrada())
+          throw std::invalid_argument("Erro: entrada invalida, insira o nome usando letras. Refaca a operacao a seguir.\n");
+        
+        produtos.push_back(nome_do_produto);
+
+        exibirMensagem("Digite a quantidade que o cliente comprou desses produtos: ");
+        int quantidade_do_produto;
+        std::cin >> quantidade_do_produto;
+        if(!verificacaoDaEntrada())
+          throw std::invalid_argument("Erro: entrada invalida, insira um numero na quantidade de pecas. Refaca a operacao a seguir.\n");
+
+        quantidades_de_produtos.push_back(quantidade_do_produto);
+
+        exibirMensagem("Quer adicionar mais algum produto para o carrinho do cliente?(y/n) ");
+        std::cin >> opcao;
+      }
       break;
     } catch (std::invalid_argument &err) {
       exibirMensagem(err.what());
     }
   }
 
-  Venda venda(cliente, produto, quantidade, data);
+  Venda venda(cliente, produtos, quantidades_de_produtos, data);
   return venda;
 }
 

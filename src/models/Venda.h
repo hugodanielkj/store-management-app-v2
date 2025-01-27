@@ -2,26 +2,27 @@
 #define VENDA_H
 
 #include <string>
+#include <vector>
 
 class Venda{
   private:
     std::string cliente;
-    std::string produto;
-    int quantidade;
+    std::vector<std::string> produtos;
+    std::vector<int> quantidades_de_produtos;
     std::string data;
 
   public:
     Venda();
-    Venda(std::string _cliente, std::string _produto, int _quantidade, std::string _data);
+    Venda(std::string _cliente, std::vector<std::string> _produtos, std::vector<int> _quantidades_de_produtos, std::string _data);
 
     // Getters e Setters
     std::string getCliente() const;
 
-    std::string getProduto() const;
-    void setProduto(std::string _produto);
+    std::vector<std::string> getProdutos() const;
+    void setProdutos(std::vector<std::string> _produtos);
 
-    int getQuantidade() const;
-    void setQuantidade(int _quantidade);
+    std::vector<int> getQuantidadesDeProdutos() const;
+    void setQuantidades(std::vector<int> _quantidades_de_produtos);
 
     std::string getData() const;
     void setData(std::string _data);
