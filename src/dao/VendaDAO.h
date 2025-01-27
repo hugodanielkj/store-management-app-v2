@@ -11,10 +11,9 @@ class VendaDAO{
     // Operacoes CRUD Essenciais
     bool salvar(const Venda& venda);
     Venda capturar(std::string cliente);
-    bool atualizar(std::string cliente);
 
     // Operacoes auxiliares
-    int getUltimoId();
+    int getUltimoId(std::string cliente);
 
   private:
     sqlite3* db;

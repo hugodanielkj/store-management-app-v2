@@ -2,7 +2,11 @@
 
 Venda::Venda() {}
 
-Venda::Venda(std::string _produto, int _quantidade, std::string _data): produto(_produto), quantidade(_quantidade), data(_data) {}
+Venda::Venda(std::string _cliente, std::string _produto, int _quantidade, std::string _data): cliente(_cliente), produto(_produto), quantidade(_quantidade), data(_data) {}
+
+std::string Venda::getCliente() const {
+  return cliente;
+}
 
 std::string Venda::getProduto() const {
   return produto;

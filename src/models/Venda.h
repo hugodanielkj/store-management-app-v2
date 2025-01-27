@@ -5,14 +5,18 @@
 
 class Venda{
   private:
+    std::string cliente;
     std::string produto;
     int quantidade;
     std::string data;
 
   public:
-    Venda(std::string _produto, int _quantidade, std::string _data);
+    Venda();
+    Venda(std::string _cliente, std::string _produto, int _quantidade, std::string _data);
 
     // Getters e Setters
+    std::string getCliente() const;
+
     std::string getProduto() const;
     void setProduto(std::string _produto);
 

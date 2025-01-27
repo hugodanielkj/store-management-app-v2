@@ -7,10 +7,10 @@ void VendaView::exibirMensagem(const std::string& mensagem){
   std::cout << mensagem;
 }
 
-void VendaView::exibirVenda(const Venda& roupa){
-  std::string produto =  roupa.getProduto();
-  int quantidade = roupa.getQuantidade();
-  std::string data = roupa.getData();
+void VendaView::exibirVenda(const Venda& venda){
+  std::string produto =  venda.getProduto();
+  int quantidade = venda.getQuantidade();
+  std::string data = venda.getData();
 
   std::cout << "Nome da roupa: " << produto << std::endl;
   std::cout << "Quantidade de pecas: " << quantidade << std::endl;
@@ -39,11 +39,16 @@ bool VendaView::perguntarSimOuNao(){
 }
 
 Venda VendaView::obterDadosVenda(){
-  std::string produto, data;
+  std::string cliente, produto, data;
   int quantidade;
 
   while(true){
     try {
+      exibirMensagem("Digite o nome da roupa: ");
+      std::cin >> cliente;
+      if(!verificacaoDaEntrada())
+        throw std::invalid_argument("Erro: entrada invalida, insira o nome usando letras. Refaca a operacao a seguir.\n");
+
       exibirMensagem("Digite o nome da roupa: ");
       std::cin >> produto;
       if(!verificacaoDaEntrada())
@@ -65,7 +70,7 @@ Venda VendaView::obterDadosVenda(){
     }
   }
 
-  Venda venda(produto, quantidade, data);
+  Venda venda(cliente, produto, quantidade, data);
   return venda;
 }
 
