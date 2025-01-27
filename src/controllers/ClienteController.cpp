@@ -36,7 +36,6 @@ void ClienteController::lerTodosClientes() {
   ClienteView view;
 
   int ultimo_id = dao.getUltimoId();
-  std::cout << "TESTE TESTE " << ultimo_id << std::endl;
   view.exibirMensagem("-------------------------------------\n");
   view.exibirMensagem("Tabela de todos os clientes cadastrados:\n");
   view.exibirMensagem("-------------------------------------\n");

@@ -3,7 +3,7 @@
 #include "controllers/ClienteController.h"
 #include "controllers/ItemDiversoController.h"
 
-//g++ main.cpp views/RoupaView.cpp views/ClienteView.cpp views/ItemDiversoView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp  models/Cliente.cpp dao/RoupaDAO.cpp dao/ClienteDAO.cpp dao/ItemDiversoDAO.cpp controllers/RoupaController.cpp controllers/ClienteController.cpp controllers/ItemDiversoController.cpp -lsqlite3
+//g++ main.cpp views/RoupaView.cpp views/ClienteView.cpp views/ItemDiversoView.cpp views/VendaView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp  models/Cliente.cpp models/Venda.cpp dao/RoupaDAO.cpp dao/ClienteDAO.cpp dao/ItemDiversoDAO.cpp dao/VendaDAO.cpp controllers/RoupaController.cpp controllers/ClienteController.cpp controllers/ItemDiversoController.cpp controllers/VendaController.cpp -lsqlite3
 
 int main(){
   // Abertura do banco de dados
@@ -132,10 +132,10 @@ int main(){
         cliente_controller.lerTodosClientes();
       }
       case 12:{
-        cliente_controller.atualizarDadosCliente();
+        //cliente_controller.atualizarDadosCliente();
       }
       case 13:{
-        cliente_controller.removerCliente();
+        //cliente_controller.removerCliente();
       }
       case 14:{
         break;
