@@ -1,7 +1,7 @@
 #ifndef CLIENTE_DAO_H
 #define CLIENTE_DAO_H
 
-#include <sqlite3.h>
+#include "../../app/sqlite3.h"
 #include "../models/Cliente.h"
 
 class ClienteDAO {

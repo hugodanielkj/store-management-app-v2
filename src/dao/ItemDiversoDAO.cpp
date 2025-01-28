@@ -54,32 +54,6 @@ ItemDiverso ItemDiversoDAO::capturarId(int id){
   return itemDiverso;
 }
 
-int ItemDiversoDAO::getUltimoId(){
-  std::string sql = "SELECT MAX(id) FROM itens_diversos;";
-  sqlite3_stmt* stmt;
-
-  if (sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
-    std::cerr << "Erro ao preparar consulta: " << sqlite3_errmsg(db) << std::endl;
-    throw std::runtime_error("Erro ao preparar consulta para obter o último ID.");
-  }
-
-  // Executar a consulta e obter o resultado
-  int ultimoID = -1;
-  if (sqlite3_step(stmt) == SQLITE_ROW) {
-    // Verificar se o resultado não é NULL
-    if (sqlite3_column_type(stmt, 0) != SQLITE_NULL) {
-        ultimoID = sqlite3_column_int(stmt, 0); // Recuperar o valor do ID
-    } else {
-        std::cerr << "Tabela está vazia, nenhum ID encontrado." << std::endl;
-    }
-  } else {
-    std::cerr << "Erro ao executar consulta: " << sqlite3_errmsg(db) << std::endl;
-  }
-
-  sqlite3_finalize(stmt);   // Finalizar consulta
-
-  return ultimoID;
-}
 
 bool ItemDiversoDAO::existeEsseItemDiverso(std::string& nome) {
     std::string sql = "SELECT COUNT(1) FROM itens_diversos WHERE nome = ?;";

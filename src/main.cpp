@@ -6,6 +6,7 @@
 // g++ main.cpp views/RoupaView.cpp views/ItemDiversoView.cpp views/ClienteView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp models/Cliente.cpp dao/RoupaDAO.cpp dao/ItemDiversoDAO.cpp dao/ClienteDAO.cpp controllers/RoupaController.cpp controllers/ItemDiversoController.cpp controllers/ClienteController.cpp -lsqlite3
 
 int main(){
+
   // Abertura do banco de dados
   sqlite3* db;
   std::string DB_PATH = "database/database.db"; 

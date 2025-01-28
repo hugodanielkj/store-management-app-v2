@@ -12,7 +12,7 @@ class ItemDiversoView{
     std::string obterNomeDoItemDiverso();
     std::string obterMarcaDoItem();
     int obterQuantidadeItemDiverso();
-    bool verificacaoDaEntrada(const std::string& entrada, const std::string& marca);
+    bool verificacaoDaEntrada(const std::string& entrada, const std::string& tipo);
 
     // Metodos de exibir informacoes ao usuario
     void exibirMensagem(const std::string& mensagem);

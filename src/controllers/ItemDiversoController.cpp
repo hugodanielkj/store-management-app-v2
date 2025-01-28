@@ -140,6 +140,7 @@ void ItemDiversoController::atualizarQuantidadeItemDiverso() {
         }
     }
 }
+
 void ItemDiversoController::removerItemDiverso() {
     ItemDiversoDAO dao(db);
     ItemDiversoView view;

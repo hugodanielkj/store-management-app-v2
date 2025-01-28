@@ -1,7 +1,7 @@
 #ifndef ITEMDIVERSO_DAO_H
 #define ITEMDIVERSO_DAO_H
 
-#include <sqlite3.h>
+#include "../../app/sqlite3.h"
 #include "../models/ItemDiverso.h"
 #include <vector>
 

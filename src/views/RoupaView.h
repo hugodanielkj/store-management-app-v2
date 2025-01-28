@@ -11,7 +11,7 @@ class RoupaView{
     Roupa obterDadosRoupa();
     std::string obterNomeRoupa();
     int obterQuantidadeRoupa();
-    bool verificacaoDaEntrada();
+    bool verificacaoDaEntrada(const std::string& entrada, const std::string& marca);
 
     // Metodos de exibir informacoes ao usuario
     void exibirMensagem(const std::string& mensagem);
