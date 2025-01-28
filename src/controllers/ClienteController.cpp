@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 
+// Inicializa o controller com a conexão do banco
 ClienteController::ClienteController(sqlite3* _db): db(_db) {}
 
 void ClienteController::adicionarCliente() {
@@ -11,6 +12,7 @@ void ClienteController::adicionarCliente() {
     ClienteView view;
     Cliente cliente;
 
+    // Loop pra confirmar se os dados estão corretos
     while(true) {
         try {
             cliente = view.obterDadosCliente();
@@ -24,6 +26,7 @@ void ClienteController::adicionarCliente() {
         }
     }
 
+    // Tenta salvar no banco
     if(dao.salvar(cliente)) {
         view.exibirMensagem("Sucesso ao adicionar Cliente.\n");
     } else {
@@ -36,6 +39,7 @@ void ClienteController::lerCliente() {
     ClienteView view;
     std::string nome = view.obterNomeCliente();
 
+    // Loop de busca do cliente
     bool loop = true;
     while(loop) {
         try {
@@ -57,6 +61,7 @@ void ClienteController::lerTodosClientes() {
     ClienteDAO dao(db);
     ClienteView view;
 
+    // Mostra todos os clientes em formato tabela
     int ultimo_id = dao.getUltimoId();
     view.exibirMensagem("-------------------------------------\n");
     view.exibirMensagem("Tabela de todos os clientes cadastrados:\n");
@@ -69,7 +74,7 @@ void ClienteController::lerTodosClientes() {
             view.exibirCliente(cliente);
             view.exibirMensagem("-------------------------------------\n");
         } catch (std::runtime_error &err) {
-            continue;
+            continue; // Pula cliente não encontrado
         }
     }
 }
@@ -79,6 +84,7 @@ void ClienteController::atualizarDadosCliente() {
     ClienteView view;
     std::string nome = view.obterNomeCliente();
 
+    // Loop pra atualizar dados
     bool loop = true;
     while(loop) {
         try {
@@ -106,6 +112,7 @@ void ClienteController::removerCliente() {
     ClienteView view;
     std::string nome = view.obterNomeCliente();
 
+    // Loop pra confirmar e remover cliente
     bool loop = true;
     while(loop) {
         try {
