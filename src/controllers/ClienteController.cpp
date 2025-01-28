@@ -58,18 +58,20 @@ void ClienteController::lerTodosClientes() {
     ClienteView view;
 
     int ultimo_id = dao.getUltimoId();
-    view.exibirMensagem("-------------------------------------\n");
-    view.exibirMensagem("Tabela de todos os clientes cadastrados:\n");
-    view.exibirMensagem("-------------------------------------\n");
-    view.exibirMensagem("Nome      | Telefone | Email\n");
-    view.exibirMensagem("-------------------------------------\n");
-    for(int i=1;i<=ultimo_id;i++){
-        try {
-            Cliente cliente = dao.capturar(i);
-            view.exibirCliente(cliente);
-            view.exibirMensagem("-------------------------------------\n");
-        } catch (std::runtime_error &err) {
-            continue;
+    if(ultimo_id != -1){
+        view.exibirMensagem("-------------------------------------\n");
+        view.exibirMensagem("Tabela de todos os clientes cadastrados:\n");
+        view.exibirMensagem("-------------------------------------\n");
+        view.exibirMensagem("Nome      | Telefone | Email\n");
+        view.exibirMensagem("-------------------------------------\n");
+        for(int i=1;i<=ultimo_id;i++){
+            try {
+                Cliente cliente = dao.capturar(i);
+                view.exibirCliente(cliente);
+                view.exibirMensagem("-------------------------------------\n");
+            } catch (std::runtime_error &err) {
+                continue;
+            }
         }
     }
 }

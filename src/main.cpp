@@ -111,66 +111,82 @@ int main(){
     switch (opcao){
       case 1:{
         roupa_controller.adicionarRoupa();
+        std::cout << std::endl;
         break;
       }
       case 2:{
         roupa_controller.lerTodasRoupas();
+        std::cout << std::endl;
         break;
       }
       case 3:{
         roupa_controller.lerRoupa();
+        std::cout << std::endl;
         break;
       }
       case 4:{
         roupa_controller.atualizarQuantidadeRoupa();
+        std::cout << std::endl;
         break;
       }
       case 5:{
         roupa_controller.removerRoupa();
+        std::cout << std::endl;
         break;
       }
       case 6:{
         itemDiverso_controller.adicionarItemDiverso();
+        std::cout << std::endl;
         break;
       }
       case 7:{
         itemDiverso_controller.lerTodosItemDiversos();
+        std::cout << std::endl;
         break;
       }
       case 8:{
         itemDiverso_controller.lerItemDiverso();
+        std::cout << std::endl;
         break;
       }
       case 9:{
         itemDiverso_controller.atualizarQuantidadeItemDiverso();
+        std::cout << std::endl;
         break;
       }
       case 10:{
         itemDiverso_controller.removerItemDiverso();
+        std::cout << std::endl;
         break;
       }
       case 11:{
         cliente_controller.adicionarCliente();
+        std::cout << std::endl;
         break;
       }
       case 12:{
         cliente_controller.lerTodosClientes();
+        std::cout << std::endl;
         break;
       }
       case 13:{
         cliente_controller.lerCliente();
+        std::cout << std::endl;
         break;
       }
       case 14:{
         cliente_controller.atualizarDadosCliente();
+        std::cout << std::endl;
         break;
       }
       case 15:{
         cliente_controller.removerCliente();
+        std::cout << std::endl;
         break;
       }
       case 16:{
         venda_controller.comecarVenda();
+        std::cout << std::endl;
         break;
       }
       case 20:{

@@ -76,7 +76,7 @@ Roupa RoupaView::obterDadosRoupa() {
       });
 
       if (!verificacaoDaEntrada(nome, "nome")) {
-        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras. Refaca a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras. Refaça a operação.\n");
       }
 
       // Solicitar e validar a quantidade do item
@@ -84,15 +84,15 @@ Roupa RoupaView::obterDadosRoupa() {
       std::string entradaQuantidade;
       std::cin >> entradaQuantidade;
       if (!verificacaoDaEntrada(entradaQuantidade, "quantidade")) {
-        throw std::invalid_argument("Erro: entrada inválida. A quantidade deve ser um número inteiro positivo. Refaca a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. A quantidade deve ser um número inteiro positivo. Refaça a operação.\n");
       }
       quantidade = std::stoi(entradaQuantidade); // Conversão segura da quantidade
 
       // Solicitar e validar o tipo/tamanho do item
-      exibirMensagem("Digite o tipo do item (P, M, G, XG, XGG): ");
+      exibirMensagem("Digite o tamanho do item (NB, RN, PP, P, M, G, XG, XGG): ");
       std::cin >> tamanho;
       if (!verificacaoDaEntrada(tamanho, "tamanho")) {
-        throw std::invalid_argument("Erro: entrada inválida. O tipo deve ser P, M, G, XG ou XGG. Refaca a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. O tamanho deve ser P, M, G, XG ou XGG. Refaça a operação.\n");
       }
 
       // Quebra do loop ao concluir com entradas válidas
@@ -132,7 +132,7 @@ bool RoupaView::verificacaoDaEntrada(const std::string& entrada, const std::stri
 
   } else if (tipo == "tamanho") {
     // Verificar se o tamanho é válido (P, M, G, XG, XGG)
-    std::vector<std::string> tamanhosValidos = {"P", "M", "G", "XG", "XGG"};
+    std::vector<std::string> tamanhosValidos = {"P", "M", "G", "XG", "XGG","p", "m", "g", "xg", "xgg","PP", "pp", "NB", "nb", "RN", "rn"};
     for (const auto& tamanho : tamanhosValidos) {
       if (entrada == tamanho) {
         return true;
