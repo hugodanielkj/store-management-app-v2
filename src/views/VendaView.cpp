@@ -2,6 +2,8 @@
 #include "../models/Venda.h"
 #include <iostream>
 #include <limits>
+#include "RoupaView.h"
+#include "ItemDiversoView.h"
 
 void VendaView::exibirMensagem(const std::string& mensagem){
   std::cout << mensagem;
@@ -60,7 +62,15 @@ Venda VendaView::obterDadosVenda(){
 
       char opcao;
       while(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
-        exibirMensagem("Digite o nome do produto que o cliente comprou: ");
+        exibirMensagem("Agora é hora de digitar o nome do produto que o cliente comprou.\n");
+        exibirMensagem("Deseja ver a lista de produtos ou ja deseja prosseguir para inserir os produtos?(y/n) ");
+        std::cin >> opcao;
+
+        if(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
+          RoupaView roupa_view;
+          ItemDiversoView item_diverso_view;
+          // Chamar funcao de exibir todas roupas e itens diversos
+        }
         std::string nome_do_produto;
         std::cin >> nome_do_produto;
         if(!verificacaoDaEntrada())
