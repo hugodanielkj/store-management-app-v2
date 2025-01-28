@@ -14,7 +14,7 @@ int main(){
     std::cerr << "Erro ao abrir database: " << sqlite3_errmsg(db);
     exit(1);
   } else {
-    std::cout << "Sucesso ao conectar database! Inicializar sistema...\n";
+    std::cout << "Sucesso ao conectar database! Inicializar sistema...\n\n";
   }
 
   // Criação da tabela de roupas
@@ -71,7 +71,7 @@ int main(){
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
 
-  std::cout << "ALERTA! - Nao utilize 'espaço', ao inves disso utilize '-' ou '_'\n\n";
+  std::cout << "ALERTA! - Nao utilize 'espaço', ao inves disso utilize '-' ou '_'\n";
 
   std::cout << "Exemplo - Camisa_Polo ou Camisa-Polo\n\n";
   
