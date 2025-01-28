@@ -1,7 +1,7 @@
 #ifndef ROUPA_DAO_H
 #define ROUPA_DAO_H
 
-#include <sqlite3.h>
+#include "../../app/sqlite3.h"
 #include "../models/Roupa.h"
 #include <vector>
 

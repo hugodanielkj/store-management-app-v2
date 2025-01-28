@@ -2,8 +2,8 @@
 #include "../models/Venda.h"
 #include <iostream>
 #include <limits>
-#include "RoupaView.h"
-#include "ItemDiversoView.h"
+#include "../controllers/RoupaController.h"
+#include "../controllers/ItemDiversoController.h"
 
 void VendaView::exibirMensagem(const std::string& mensagem){
   std::cout << mensagem;
@@ -60,17 +60,24 @@ Venda VendaView::obterDadosVenda(){
       if(!verificacaoDaEntrada())
         throw std::invalid_argument("Erro: entrada invalida, insira o tamanho utilizando poucos caracteres. Refaca a operacao a seguir.\n");
 
-      char opcao;
-      while(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
-        exibirMensagem("Agora é hora de digitar o nome do produto que o cliente comprou.\n");
-        exibirMensagem("Deseja ver a lista de produtos ou ja deseja prosseguir para inserir os produtos?(y/n) ");
-        std::cin >> opcao;
+      char opcao = 'y';
+      exibirMensagem("Agora é hora de digitar o nome do produto que o cliente comprou.\n");
+      exibirMensagem("Deseja ver a lista de produtos ou ja deseja prosseguir para inserir os produtos?\nDigite 'y' para ver a lista e 'n' para prosseguir: ");
+      std::cin >> opcao;
 
-        if(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
-          RoupaView roupa_view;
-          ItemDiversoView item_diverso_view;
-          // Chamar funcao de exibir todas roupas e itens diversos
-        }
+      // Caso o cliente precise rever qual produto do cliente deseja adicionar
+      if(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
+        exibirMensagem("O menu sera aberto na proxima aba!\nAperte o numero 2 para mostrar a lista de roupas ou aperte 6 para mostrar os itens diversos.\nTECLE 1 E ENTENDER PARA CONTINUAR AO MENU.");
+        std::cin >> opcao;
+        break;
+        //RoupaController roupa_controller(db);
+        //ItemDiversoController item_diverso_controller(db);
+        // Chamar funcao de exibir todas roupas e itens diversos
+      }
+
+      opcao = 'y';
+      while(opcao == 'y' || opcao == 'Y' || opcao == 's' || opcao == 'S'){
+        exibirMensagem("Digite o nome de um produto: ");
         std::string nome_do_produto;
         std::cin >> nome_do_produto;
         if(!verificacaoDaEntrada())

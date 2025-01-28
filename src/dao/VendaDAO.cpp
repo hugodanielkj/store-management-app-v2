@@ -3,22 +3,28 @@
 
 VendaDAO::VendaDAO(sqlite3* _db): db(_db) {}
 
-/*
-bool VendaDAO::salvar(const Venda& venda){
-  std::string sql = "INSERT INTO " + venda.getCliente() + "_tabela_venda (produto, quantidade, data) VALUES('" + venda.getProduto() + "', " + std::to_string(venda.getQuantidade()) +", '" + venda.getData() + "');";
 
-  char* mensagemErro = nullptr;
-  int exit = sqlite3_exec(db, sql.c_str(), 0, 0, &mensagemErro);
-  if(exit != SQLITE_OK){
-    std::cerr << "Erro para adicionar Venda: " << mensagemErro << std::endl;
-    sqlite3_free(mensagemErro);
-    return false;
+bool VendaDAO::salvar(const Venda& venda){
+  for(int i=0;i<venda.getProdutos().size();i++){
+    std::string sql = "INSERT INTO " + venda.getCliente() + "_tabela_venda (produto, quantidade, data) VALUES('" + venda.getProdutos()[i] + "', " + std::to_string(venda.getQuantidadesDeProdutos()[i]) +", '" + venda.getData() + "');";
+
+    std::cout << sql << std::endl;
+
+    char* mensagemErro = nullptr;
+    int exit = sqlite3_exec(db, sql.c_str(), 0, 0, &mensagemErro);
+    if(exit != SQLITE_OK){
+      std::cerr << "Erro para adicionar Venda: " << mensagemErro << std::endl;
+      sqlite3_free(mensagemErro);
+      return false;
+    }
   }
 
-  std::cout << "Venda adicionada com sucesso!" << std::endl;
   return true;
 }
-*/
+
+bool VendaDAO::produtosCorrespondemAosItensAdicionados(std::vector<std::string> produtos){
+  return true;
+}
 
 int VendaDAO::getUltimoId(std::string cliente){
   std::string sql = "SELECT MAX(id) FROM "+ cliente +"_tabela_venda;";

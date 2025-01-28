@@ -14,6 +14,22 @@ bool ClienteDAO::salvar(const Cliente& cliente){
     return false;
   }
 
+  sql = "CREATE TABLE IF NOT EXISTS "+ cliente.getNome() + R"(_tabela_venda (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      produto TEXT NOT NULL,
+      quantidade INTEGER NOT NULL,
+      data TEXT NOT NULL
+    );
+  )";
+
+  mensagemErro = nullptr;
+  exit = sqlite3_exec(db, sql.c_str(), 0, 0, &mensagemErro);
+  if(exit != SQLITE_OK){
+    std::cerr << "Erro para adicionar cliente: " << mensagemErro << std::endl;
+    sqlite3_free(mensagemErro);
+    return false;
+  }
+
   std::cout << "Cliente adicionado com sucesso!" << std::endl;
   return true;
 }

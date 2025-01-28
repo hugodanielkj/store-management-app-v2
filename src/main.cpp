@@ -2,6 +2,7 @@
 #include "controllers/RoupaController.h"
 #include "controllers/ClienteController.h"
 #include "controllers/ItemDiversoController.h"
+#include "controllers/VendaController.h"
 
 //g++ main.cpp views/RoupaView.cpp views/ClienteView.cpp views/ItemDiversoView.cpp views/VendaView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp  models/Cliente.cpp models/Venda.cpp dao/RoupaDAO.cpp dao/ClienteDAO.cpp dao/ItemDiversoDAO.cpp dao/VendaDAO.cpp controllers/RoupaController.cpp controllers/ClienteController.cpp controllers/ItemDiversoController.cpp controllers/VendaController.cpp -lsqlite3
 
@@ -66,6 +67,7 @@ int main(){
   RoupaController roupa_controller(db);
   ClienteController cliente_controller(db);
   ItemDiversoController itemDiverso_controller(db);
+  VendaController venda_controller(db);
   
   std::cout << "-------- Sistema de gerenciamento de comercio. --------\n";
 
@@ -74,7 +76,7 @@ int main(){
   std::cout << "Exemplo - Camisa_Polo ou Camisa-Polo\n\n";
   
   int opcao = 0;
-  while(opcao != 14){
+  while(opcao != 15){
     std::cout << "\nMenu de acoes\n\n";
     std::cout << "--- Roupas ---\n";
     std::cout << "1 - Adicionar uma roupa\n";
@@ -86,7 +88,7 @@ int main(){
     std::cout << "11 - Mostrar clientes cadastrados\n";
     std::cout << "12 - Atualizar dados de um cliente\n";
     std::cout << "13 - Deletar um cliente\n";
-    std::cout << "14 - Fechar sistema\n";
+    std::cout << "14 - Gerar uma venda\n";
     std::cout << "Escolha uma opcao do menu de acoes: ";
     std::cin >> opcao;
 
@@ -121,15 +123,19 @@ int main(){
       }
       case 8:{
         itemDiverso_controller.removerItemDiverso();
+        break;
       }
       case 9:{
         itemDiverso_controller.lerItemDiverso();
+        break;
       }
       case 10:{
         cliente_controller.adicionarCliente();
+        break;
       }
       case 11:{
         cliente_controller.lerTodosClientes();
+        break;
       }
       case 12:{
         //cliente_controller.atualizarDadosCliente();
@@ -138,6 +144,7 @@ int main(){
         //cliente_controller.removerCliente();
       }
       case 14:{
+        venda_controller.comecarVenda();
         break;
       }
       default:
