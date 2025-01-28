@@ -3,10 +3,12 @@
 #include <iostream>
 #include <limits>
 
+// Exibe mensagem na tela
 void ClienteView::exibirMensagem(const std::string& mensagem) {
   std::cout << mensagem;
 }
 
+// Exibe dados do cliente formatados
 void ClienteView::exibirCliente(const Cliente& cliente) {
   std::string nome = cliente.getNome();
   std::string telefone = cliente.getTelefone();
@@ -17,6 +19,7 @@ void ClienteView::exibirCliente(const Cliente& cliente) {
   std::cout << "Email: " << email << std::endl;
 }
 
+// Obtém nome do cliente via input
 std::string ClienteView::obterNomeCliente() {
   exibirMensagem("Digite o nome do cliente exatamente como foi cadastrado: ");
   std::string nome;
@@ -24,13 +27,15 @@ std::string ClienteView::obterNomeCliente() {
   return nome;
 }
 
+// Processa resposta sim/não do usuário
 bool ClienteView::perguntarSimOuNao() {
   char opcao_do_usuario;
   std::cin >> opcao_do_usuario;
 
   while(true) {
     try {
-      if(opcao_do_usuario == 'y' || opcao_do_usuario == 'Y' || opcao_do_usuario == 's' || opcao_do_usuario == 'S')
+      if(opcao_do_usuario == 'y' || opcao_do_usuario == 'Y' || 
+         opcao_do_usuario == 's' || opcao_do_usuario == 'S')
         return true;
       else if(opcao_do_usuario == 'n' || opcao_do_usuario == 'N')
         return false;
@@ -45,21 +50,25 @@ bool ClienteView::perguntarSimOuNao() {
   return false;
 }
 
+// Obtém todos os dados do cliente com validação
 Cliente ClienteView::obterDadosCliente() {
   std::string nome, telefone, email;
 
   while(true) {
     try {
+      // Coleta e valida nome
       exibirMensagem("Digite o nome do cliente: ");
       std::cin >> nome;
       if(!verificacaoDaEntrada())
         throw std::invalid_argument("Erro: entrada invalida, insira o nome usando letras. Refaca a operacao a seguir.\n");
 
+      // Coleta e valida telefone  
       exibirMensagem("Digite o telefone do cliente: ");
       std::cin >> telefone;
       if(!verificacaoDaEntrada())
         throw std::invalid_argument("Erro: entrada invalida, insira um telefone valido. Refaca a operacao a seguir.\n");
 
+      // Coleta e valida email
       exibirMensagem("Digite o email do cliente: ");
       std::cin >> email;
       if(!verificacaoDaEntrada())
@@ -75,6 +84,7 @@ Cliente ClienteView::obterDadosCliente() {
   return cliente;
 }
 
+// Verifica se input é válido
 bool ClienteView::verificacaoDaEntrada() {
   if(std::cin.fail()) {
     std::cin.clear();
@@ -84,6 +94,7 @@ bool ClienteView::verificacaoDaEntrada() {
   return true;
 }
 
+// Obtém telefone do cliente via input
 std::string ClienteView::obterTelefoneCliente() {
   exibirMensagem("Digite o telefone do cliente: ");
   std::string telefone;

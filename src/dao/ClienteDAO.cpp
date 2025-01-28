@@ -1,9 +1,11 @@
 #include "ClienteDAO.h"
 #include <iostream>
 
+// Construtor que recebe conexão com banco SQLite
 ClienteDAO::ClienteDAO(sqlite3* _db): db(_db) {}
 
 bool ClienteDAO::salvar(const Cliente& cliente){
+    // Insere dados básicos do cliente
     std::string sql = "INSERT INTO clientes (nome, telefone, email) VALUES('" + cliente.getNome() + "', '" + cliente.getTelefone() + "', '" + cliente.getEmail() + "');";
 
     char* mensagemErro = nullptr;
@@ -14,7 +16,8 @@ bool ClienteDAO::salvar(const Cliente& cliente){
         return false;
     }
 
-  sql = "CREATE TABLE IF NOT EXISTS "+ cliente.getNome() + R"(_tabela_venda (
+    // Cria tabela de vendas específica do cliente
+    sql = "CREATE TABLE IF NOT EXISTS "+ cliente.getNome() + R"(_tabela_venda (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       produto TEXT NOT NULL,
       quantidade INTEGER NOT NULL,
@@ -22,18 +25,19 @@ bool ClienteDAO::salvar(const Cliente& cliente){
     );
   )";
 
-  mensagemErro = nullptr;
-  exit = sqlite3_exec(db, sql.c_str(), 0, 0, &mensagemErro);
-  if(exit != SQLITE_OK){
-    std::cerr << "Erro para adicionar cliente: " << mensagemErro << std::endl;
-    sqlite3_free(mensagemErro);
-    return false;
-  }
+    mensagemErro = nullptr;
+    exit = sqlite3_exec(db, sql.c_str(), 0, 0, &mensagemErro);
+    if(exit != SQLITE_OK){
+        std::cerr << "Erro para adicionar cliente: " << mensagemErro << std::endl;
+        sqlite3_free(mensagemErro);
+        return false;
+    }
 
-  std::cout << "Cliente adicionado com sucesso!" << std::endl;
-  return true;
+    std::cout << "Cliente adicionado com sucesso!" << std::endl;
+    return true;
 }
 
+// Busca cliente pelo ID
 Cliente ClienteDAO::capturar(int id){
     std::string sql = "SELECT * FROM clientes WHERE id = ?;";
 
@@ -50,7 +54,7 @@ Cliente ClienteDAO::capturar(int id){
     }
 
     Cliente cliente;
-
+    // Popula objeto cliente com dados do banco
     if(sqlite3_step(stmt) == SQLITE_ROW){
         cliente.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
         cliente.setTelefone(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2)));
@@ -64,7 +68,7 @@ Cliente ClienteDAO::capturar(int id){
     return cliente;
 }
 
-
+// Busca cliente pelo nome
 Cliente ClienteDAO::capturar(std::string nome){
     std::string sql = "SELECT * FROM clientes WHERE nome = ?;";
 
@@ -81,7 +85,7 @@ Cliente ClienteDAO::capturar(std::string nome){
     }
 
     Cliente cliente;
-
+    // Popula objeto cliente com dados do banco
     if(sqlite3_step(stmt) == SQLITE_ROW){
         cliente.setNome(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1)));
         cliente.setTelefone(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2)));
@@ -95,6 +99,7 @@ Cliente ClienteDAO::capturar(std::string nome){
     return cliente;
 }
 
+// Atualiza dados do cliente (telefone ou email)
 bool ClienteDAO::atualizar(const Cliente& cliente) {
     std::cout << "\nQual informação você deseja atualizar?\n";
     std::cout << "1 - Telefone\n";
@@ -107,6 +112,7 @@ bool ClienteDAO::atualizar(const Cliente& cliente) {
     std::string sql;
     std::string novo_valor;
 
+    // Define qual campo será atualizado
     switch(opcao) {
         case 1:
             sql = "UPDATE clientes SET telefone = ? WHERE nome = ?;";
@@ -123,6 +129,7 @@ bool ClienteDAO::atualizar(const Cliente& cliente) {
             return false;
     }
     
+    // Prepara e executa atualização
     sqlite3_stmt* stmt;
     if(sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
         std::cerr << "Erro ao preparar atualização: " << sqlite3_errmsg(db) << std::endl;
@@ -147,6 +154,7 @@ bool ClienteDAO::atualizar(const Cliente& cliente) {
     return true;
 }
 
+// Remove cliente do banco pelo nome
 bool ClienteDAO::deletar(std::string nome){
     std::string sql = "DELETE FROM clientes WHERE nome = ?;";
     
@@ -172,6 +180,7 @@ bool ClienteDAO::deletar(std::string nome){
     return true;
 }
 
+// Retorna o maior ID da tabela de clientes
 int ClienteDAO::getUltimoId(){
     std::string sql = "SELECT MAX(id) FROM clientes;";
     sqlite3_stmt* stmt;
@@ -196,6 +205,7 @@ int ClienteDAO::getUltimoId(){
     return ultimoID;
 }
 
+// Verifica se existe cliente com o nome informado
 bool ClienteDAO::existeEsseCliente(std::string nome){
     std::string sql = "SELECT COUNT(*) FROM clientes WHERE nome = ?;";
     

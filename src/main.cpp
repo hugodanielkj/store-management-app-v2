@@ -28,16 +28,6 @@ int main(){
     );
   )";
 
-  // Criação da tabela de clientes
-  std::string sql_clientes = R"(
-    CREATE TABLE IF NOT EXISTS clientes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nome TEXT NOT NULL,
-      telefone TEXT NOT NULL,
-      email TEXT NOT NULL
-    );
-  )";
-
   char* errMsg = nullptr;
   if (sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg) != SQLITE_OK) {
     std::cerr << "Erro ao criar tabela de roupas: " << errMsg << std::endl;
@@ -65,7 +55,7 @@ int main(){
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       nome TEXT NOT NULL,
       quantidade INTEGER NOT NULL,
-      tipo TEXT NOT NULL
+      marca TEXT NOT NULL
     );
   )";
 
