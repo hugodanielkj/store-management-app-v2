@@ -12,6 +12,7 @@ class ClienteView {
     std::string obterNomeCliente();
     std::string obterTelefoneCliente();
     bool verificacaoDaEntrada();
+    bool verificacaoNome(const std::string& nome);
 
     // Metodos de exibir informacoes ao usuario
     void exibirMensagem(const std::string& mensagem);

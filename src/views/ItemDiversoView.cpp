@@ -63,11 +63,14 @@ ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
 
   while (true) {
     try {
+      // Limpar o buffer do cin antes de usar getline
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
       // Solicitar e validar o nome do item
       exibirMensagem("Digite o nome do item: ");
-      std::cin >> nome;
+      getline(std::cin, nome);
       if (!verificacaoDaEntrada(nome, "nome")) {
-        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras. Refaca a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras e sem espaço. Refaca a operação.\n");
       }
 
       // Solicitar e validar a quantidade do item
@@ -81,9 +84,9 @@ ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
 
       // Solicitar e validar a marca do item
       exibirMensagem("Digite a marca do item: ");
-      std::cin >> marca;
+      getline(std::cin, marca);
       if (!verificacaoDaEntrada(marca, "marca")) {
-        throw std::invalid_argument("Erro: entrada inválida. A marca deve conter apenas letras. Refaca a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. A marca deve conter apenas letras e sem espaço. Refaca a operação.\n");
       }
 
       // Quebra do loop ao concluir com entradas válidas
@@ -91,6 +94,7 @@ ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
 
     } catch (const std::invalid_argument &err) {
       exibirMensagem(err.what()); // Exibir mensagem de erro e repetir o loop
+      exibirMensagem("Tecle ENTER para retomar a operação.");
     }
   }
 
@@ -103,7 +107,7 @@ bool ItemDiversoView::verificacaoDaEntrada(const std::string& entrada, const std
   if (tipo == "nome" || tipo == "marca") {
     // Verificar se a entrada contém apenas letras
     for (char c : entrada) {
-      if (!std::isalpha(c)) { // Não é letra
+      if (!std::isalpha(c) && c != '_' && c != '-') { // Não é letra
         return false;
       }
     }

@@ -24,33 +24,39 @@ std::string RoupaView::obterNomeRoupa() {
     try {
       exibirMensagem("Digite o nome do item: ");
       std::string nome;
-      std::cin >> nome;
-
+      std::cin.ignore();
+      getline(std::cin, nome);
 
       // Verificar se o nome contém apenas letras
       if (!verificacaoDaEntrada(nome, "nome")) {
-        throw std::invalid_argument("Erro: O nome deve conter apenas letras. Refaca a operacao.\n");
+        throw std::invalid_argument("Erro: O nome deve conter apenas letras e sem espaço.\n");
       }
 
       return nome; // Retornar o nome válido
     } catch (const std::invalid_argument& err) {
       exibirMensagem(err.what());
+      //exibirMensagem("Quer fazer a operacao novamente?(y/n) ");
+      throw std::runtime_error("Quer fazer a operacao novamente?(y/n) ");
     }
   }
 }
 
 bool RoupaView::perguntarSimOuNao(){
-  char opcao_do_usuario;
-  std::cin >> opcao_do_usuario;
+  std::string opcao_do_usuario;
 
   while(true){
     try{
-      if(opcao_do_usuario == 'y' || opcao_do_usuario == 'Y' || opcao_do_usuario == 's' || opcao_do_usuario == 'S')
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      getline(std::cin, opcao_do_usuario);
+      std::cout << opcao_do_usuario << std::endl;
+      if(opcao_do_usuario.size() != 1)
+        throw std::invalid_argument("Erro 1: Nao foi digitado o caracter esperado. Digite 'y' se deseja realizar a operacao e 'n' se nao deseja realizar a operacao: ");
+      if(opcao_do_usuario == "y" || opcao_do_usuario == "Y" || opcao_do_usuario == "s" || opcao_do_usuario == "S")
         return true;
-      else if(opcao_do_usuario == 'n' || opcao_do_usuario == 'N')
+      else if(opcao_do_usuario == "n" || opcao_do_usuario == "N")
         return false;
       else
-        throw std::invalid_argument("Erro: Digite 'y' se deseja realizar a operacao e 'n' se nao deseja realizar a operacao: ");
+        throw std::invalid_argument("Erro 2: Nao foi digitado o caracter esperado. Digite 'y' se deseja realizar a operacao e 'n' se nao deseja realizar a operacao: ");
       break;
     } catch (std::invalid_argument &err) {
       exibirMensagem(err.what());
@@ -66,9 +72,12 @@ Roupa RoupaView::obterDadosRoupa() {
 
   while (true) {
     try {
+      // Limpar o buffer do cin antes de usar getline
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
       // Solicitar e validar o nome do item
       exibirMensagem("Digite o nome do item: ");
-      std::cin >> nome;
+      getline(std::cin, nome);
 
        // Converter todas as letras para minúsculas
       std::transform(nome.begin(), nome.end(), nome.begin(), [](unsigned char c) {
@@ -76,7 +85,7 @@ Roupa RoupaView::obterDadosRoupa() {
       });
 
       if (!verificacaoDaEntrada(nome, "nome")) {
-        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras. Refaça a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. O nome deve conter apenas letras e sem espaço.\n");
       }
 
       // Solicitar e validar a quantidade do item
@@ -84,7 +93,7 @@ Roupa RoupaView::obterDadosRoupa() {
       std::string entradaQuantidade;
       std::cin >> entradaQuantidade;
       if (!verificacaoDaEntrada(entradaQuantidade, "quantidade")) {
-        throw std::invalid_argument("Erro: entrada inválida. A quantidade deve ser um número inteiro positivo. Refaça a operação.\n");
+        throw std::invalid_argument("Erro: entrada inválida. A quantidade deve ser um número inteiro positivo.\n");
       }
       quantidade = std::stoi(entradaQuantidade); // Conversão segura da quantidade
 
@@ -92,7 +101,7 @@ Roupa RoupaView::obterDadosRoupa() {
       exibirMensagem("Digite o tamanho do item (NB, RN, PP, P, M, G, XG, XGG): ");
       std::cin >> tamanho;
       if (!verificacaoDaEntrada(tamanho, "tamanho")) {
-        throw std::invalid_argument("Erro: entrada inválida. O tamanho deve ser P, M, G, XG ou XGG. Refaça a operação.\n");
+        throw std::runtime_error("Erro: entrada inválida. O tamanho deve ser P, M, G, XG ou XGG.\n");
       }
 
       // Quebra do loop ao concluir com entradas válidas
@@ -100,6 +109,10 @@ Roupa RoupaView::obterDadosRoupa() {
 
     } catch (const std::invalid_argument &err) {
       exibirMensagem(err.what()); // Exibir mensagem de erro e repetir o loop
+      throw std::invalid_argument("Deseja fazer a operação novamente?(y/n) ");
+    } catch (const std::runtime_error &err) {
+      exibirMensagem(err.what()); // Exibir mensagem de erro e repetir o loop
+      throw std::invalid_argument("Deseja fazer a operação novamente?(y/n) ");
     }
   }
 
@@ -112,7 +125,7 @@ bool RoupaView::verificacaoDaEntrada(const std::string& entrada, const std::stri
  if (tipo == "nome") {
     // Verificar se a entrada contém apenas letras
     for (char c : entrada) {
-      if (!std::isalpha(c)) { // Não é letra
+      if (!std::isalpha(c) && c != '_' && c != '-') { // Não é letra
         return false;
       }
     }
