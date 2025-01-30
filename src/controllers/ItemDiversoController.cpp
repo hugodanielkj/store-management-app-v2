@@ -20,10 +20,12 @@ void ItemDiversoController::adicionarItemDiverso(){
       view.exibirItemDiverso(itemDiverso);
       view.exibirMensagem("As informacoes dos itens acima estao corretas?(y/n)");
       if(!view.perguntarSimOuNao())
-        throw std::invalid_argument("Repita a operacao.\n");
+        throw std::invalid_argument("Deseja fazer a operacao novamente?(y/n) \n");
       break;
     } catch (std::invalid_argument &err) {
       view.exibirMensagem(err.what());
+       if(!view.perguntarSimOuNao())
+        return;
     }
   }
 
@@ -46,10 +48,13 @@ void ItemDiversoController::lerItemDiverso(){
       view.exibirItemDiverso(itemDiverso);
       break;
     } catch (std::invalid_argument &err) {
-      view.exibirMensagem("Erro: Nome invalido para a Roupa. Quer fazer a operacao novamente?\n");
-      loop = view.perguntarSimOuNao();
+      view.exibirMensagem("Erro: Nome invalido para a Roupa. Quer fazer a operação novamente?(y/n) ");
+      loop = view.perguntarSimOuNao();    // Usuario diz se quer refazer operacao ou nao
+    } catch (std::runtime_error &err) {
+      view.exibirMensagem(err.what());
+      loop = view.perguntarSimOuNao();    // Usuario diz se quer refazer operacao ou nao
     }
-  }
+  } 
 }
 
 void ItemDiversoController::lerTodosItemDiversos() {

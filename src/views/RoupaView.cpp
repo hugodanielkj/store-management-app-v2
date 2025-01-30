@@ -40,30 +40,29 @@ std::string RoupaView::obterNomeRoupa() {
     }
   }
 }
+bool RoupaView::perguntarSimOuNao() {
+    std::string opcao_do_usuario;
 
-bool RoupaView::perguntarSimOuNao(){
-  std::string opcao_do_usuario;
+    while (true) {
+        try {
+            std::getline(std::cin, opcao_do_usuario);
+            
+            if (opcao_do_usuario.empty() || opcao_do_usuario.size() != 1) {
+                throw std::invalid_argument("Erro 1: Digite apenas 'y' para SIM ou 'n' para NÃO: ");
+            }
 
-  while(true){
-    try{
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      getline(std::cin, opcao_do_usuario);
-      std::cout << opcao_do_usuario << std::endl;
-      if(opcao_do_usuario.size() != 1)
-        throw std::invalid_argument("Erro 1: Nao foi digitado o caracter esperado. Digite 'y' se deseja realizar a operacao e 'n' se nao deseja realizar a operacao: ");
-      if(opcao_do_usuario == "y" || opcao_do_usuario == "Y" || opcao_do_usuario == "s" || opcao_do_usuario == "S")
-        return true;
-      else if(opcao_do_usuario == "n" || opcao_do_usuario == "N")
-        return false;
-      else
-        throw std::invalid_argument("Erro 2: Nao foi digitado o caracter esperado. Digite 'y' se deseja realizar a operacao e 'n' se nao deseja realizar a operacao: ");
-      break;
-    } catch (std::invalid_argument &err) {
-      exibirMensagem(err.what());
+            char resposta = std::tolower(opcao_do_usuario[0]); // Simplifica a validação
+            if (resposta == 'y') {
+                return true;
+            } else if (resposta == 'n') {
+                return false;
+            } else {
+                throw std::invalid_argument("Erro 2: Caractere inválido. Use 'y' ou 'n': ");
+            }
+        } catch (const std::invalid_argument &err) {
+            exibirMensagem(err.what());
+        }
     }
-  }
-
-  return false;   // Apenas para nao gerar warning
 }
 
 Roupa RoupaView::obterDadosRoupa() {
@@ -100,6 +99,7 @@ Roupa RoupaView::obterDadosRoupa() {
       // Solicitar e validar o tipo/tamanho do item
       exibirMensagem("Digite o tamanho do item (NB, RN, PP, P, M, G, XG, XGG): ");
       std::cin >> tamanho;
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       if (!verificacaoDaEntrada(tamanho, "tamanho")) {
         throw std::runtime_error("Erro: entrada inválida. O tamanho deve ser P, M, G, XG ou XGG.\n");
       }

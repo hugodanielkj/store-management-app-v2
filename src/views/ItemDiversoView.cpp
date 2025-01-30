@@ -36,25 +36,30 @@ std::string ItemDiversoView::obterNomeDoItemDiverso() {
   }
 }
 
-bool ItemDiversoView::perguntarSimOuNao(){
-  char opcao_do_usuario;
-  std::cin >> opcao_do_usuario;
+bool ItemDiversoView::perguntarSimOuNao() {
+    std::string opcao_do_usuario;
 
-  while(true){
-    try{
-      if(opcao_do_usuario == 'y' || opcao_do_usuario == 'Y' || opcao_do_usuario == 's' || opcao_do_usuario == 'S')
-        return true;
-      else if(opcao_do_usuario == 'n' || opcao_do_usuario == 'N')
-        return false;
-      else
-        throw std::invalid_argument("Erro: Digite 'y' se deseja realizar a operacao e 'n' se nao deseja realizar a operacao: ");
-      break;
-    } catch (std::invalid_argument &err) {
-      exibirMensagem(err.what());
+    while (true) {
+        try {
+            // Removeu o "ignore()" desnecessário
+            std::getline(std::cin, opcao_do_usuario);
+
+            if (opcao_do_usuario.empty() || opcao_do_usuario.size() != 1) {
+                throw std::invalid_argument("Erro 1: Digite apenas 'y' para SIM ou 'n' para NÃO: ");
+            }
+
+            char resposta = std::tolower(opcao_do_usuario[0]); // Simplifica a validação
+            if (resposta == 'y') {
+                return true;
+            } else if (resposta == 'n') {
+                return false;
+            } else {
+                throw std::invalid_argument("Erro 2: Caractere inválido. Use 'y' ou 'n': ");
+            }
+        } catch (const std::invalid_argument &err) {
+            exibirMensagem(err.what());
+        }
     }
-  }
-
-  return false;   // Apenas para nao gerar warning
 }
 
 ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
@@ -82,8 +87,10 @@ ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
       }
       quantidade = std::stoi(entradaQuantidade); // Conversão segura da quantidade
 
+
       // Solicitar e validar a marca do item
       exibirMensagem("Digite a marca do item: ");
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       getline(std::cin, marca);
       if (!verificacaoDaEntrada(marca, "marca")) {
         throw std::invalid_argument("Erro: entrada inválida. A marca deve conter apenas letras e sem espaço. Refaca a operação.\n");
@@ -94,7 +101,6 @@ ItemDiverso ItemDiversoView::obterDadoItemDiverso() {
 
     } catch (const std::invalid_argument &err) {
       exibirMensagem(err.what()); // Exibir mensagem de erro e repetir o loop
-      exibirMensagem("Tecle ENTER para retomar a operação.");
     }
   }
 

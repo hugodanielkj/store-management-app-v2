@@ -3,6 +3,7 @@
 #include "controllers/ClienteController.h"
 #include "controllers/ItemDiversoController.h"
 #include "controllers/VendaController.h"
+#include <limits>
 
 // g++ main.cpp views/RoupaView.cpp views/ItemDiversoView.cpp views/ClienteView.cpp views/VendaView.cpp models/Roupa.cpp models/Produto.cpp models/ItemDiverso.cpp models/Cliente.cpp models/Venda.cpp dao/RoupaDAO.cpp dao/ItemDiversoDAO.cpp dao/ClienteDAO.cpp dao/VendaDAO.cpp controllers/RoupaController.cpp controllers/ItemDiversoController.cpp controllers/ClienteController.cpp controllers/VendaController.cpp -lsqlite3
 
@@ -96,7 +97,14 @@ int main(){
     std::cout << "16 - Gerar uma nova venda\n";
     std::cout << "20 - Fechar sistema\n";
     std::cout << "Escolha uma opção do menu de ações: ";
-    std::cin >> opcao;
+    // Verifica se a leitura falhou (ex: input não numérico)
+    if (!(std::cin >> opcao)) {
+        std::cin.clear(); // Limpa o estado de erro
+        // Ignora todo o conteúdo restante no buffer até a próxima quebra de linha
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "\nErro: Opção inválida! Digite um número entre 1 e 20.\n\n";
+        continue; // Volta ao início do loop
+    }
 
     switch (opcao){
       case 1:{
@@ -182,9 +190,9 @@ int main(){
       case 20:{
         break;
       }
-      default:
-        std::cout << "Opcao invalida!\n";
-        break;
+     default:
+            std::cout << "\nErro: Opção inválida! Digite um número entre 1 e 20.\n\n";
+            break;
     }
   }
 

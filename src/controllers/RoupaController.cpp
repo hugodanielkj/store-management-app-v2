@@ -32,6 +32,7 @@ void RoupaController::adicionarRoupa(){
   }
 }
 
+
 void RoupaController::lerRoupa(){
   RoupaDAO dao(db);
   RoupaView view;
@@ -52,6 +53,7 @@ void RoupaController::lerRoupa(){
       view.exibirMensagem(err.what());
       loop = view.perguntarSimOuNao();    // Usuario diz se quer refazer operacao ou nao
     }
+    
   }
 }
 
